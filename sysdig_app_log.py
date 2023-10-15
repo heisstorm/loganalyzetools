@@ -8,6 +8,7 @@ import logging
 import pymysql
 import sys
 import psycopg2
+import redis
 
 app = Flask("sysdig_app_log")
 app.config['MYSQL_HOST'] = 'en4217394l.cidse.dhcp.asu.edu'  # 数据库地址
@@ -18,9 +19,11 @@ app.config['MYSQL_CHARSET'] = 'utf8mb4'  # 数据库编码
 if sys.platform.startswith('linux'):
     mysql_log_path = "/var/lib/mysql/en4217394l.log"
     postgresql_log_path = "/var/log/pg_log/postgresql-2023-10-14_000000.log"
+    redis_log_path = "/var/log/redis/redis-server.log"
 else:
     mysql_log_path = "static/var/lib/mysql/en4217394l.log"
     postgresql_log_path = "static/var/log/pg_log/postgresql-2023-10-02_010707.log"
+    redis_log_path = "static/var/log/pg_log/postgresql-2023-10-02_010707.log"
 
 @app.route('/', methods=['GET'])
 def button_page():
@@ -34,7 +37,7 @@ def init_backend_config():
     global postgresql_log_path
     with open("/var/lib/postgresql/15/main/current_logfiles", "r") as postgresql_log_assign:
         first_line = postgresql_log_assign.readline()
-    postgresql_log_path = first_line[len("stderr "):]
+    postgresql_log_path = first_line[len("stderr "):].rstrip('\n')
 
 @app.route('/submit_everything', methods=['POST'])
 def submit_everything():
@@ -102,6 +105,27 @@ def process_postgresql_sytax(sytax):
         sql_return_str = "%s%s\n" % (sql_return_str, str(sql_return_item).rstrip("}").lstrip("{"))
     return sql_return_str
 
+def process_redis_sytax(sytax):
+    redis_conn = redis.Redis(host=app.config['MYSQL_HOST'], port=6379, db=0)
+    sql_return_str = ""
+    cursor = '0'
+    redis_syntax = sytax.split("?")[0]
+    redis_action = sytax.split("?")[1]
+    if redis_action == "query":
+        while True:
+            cursor, data = redis_conn.scan(cursor=cursor)
+            for key in data:
+                value = redis_conn.get(key).decode('utf-8')
+                sql_return_str = "%sKey: %s, Value: %s\n" % (sql_return_str, key,value)
+            if cursor == 0:
+                break  # When cursor is '0', we've iterated through all keys
+    elif redis_action == "delete":
+        redis_conn.delete(redis_syntax.split(",")[0].strip())
+    else:
+        redis_conn.set(redis_syntax.split(",")[0].strip(), redis_syntax.split(",")[1].strip())
+
+    redis_conn.connection_pool.disconnect()
+    return sql_return_str
 def process_sql_log(sql_log_path):
     with open(sql_log_path, "r") as sql_log_file:
         all_lines = sql_log_file.readlines()
@@ -209,7 +233,6 @@ def db_changepwd():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/query_db_user_password', methods=['POST'])
 def query_db_user_password():
@@ -234,7 +257,6 @@ def query_db_user_password():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/create_database', methods=['POST'])
 def create_database():
@@ -260,7 +282,6 @@ def create_database():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/query_database', methods=['POST'])
 def query_database():
@@ -285,7 +306,6 @@ def query_database():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/delete_database', methods=['POST'])
 def delete_database():
@@ -311,7 +331,6 @@ def delete_database():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/create_table', methods=['POST'])
 def create_table():
@@ -338,7 +357,6 @@ def create_table():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/query_table', methods=['POST'])
 def query_table():
@@ -364,7 +382,6 @@ def query_table():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/delete_table', methods=['POST'])
 def delete_table():
@@ -391,7 +408,6 @@ def delete_table():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/insert_data', methods=['POST'])
 def insert_data():
@@ -407,7 +423,10 @@ def insert_data():
         sql_result = process_postgresql_sytax(sql_sytax)
         sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
-        pass
+        # add action to redis
+        sql_sytax = "%s?insert" % insert_sql
+        sql_result = process_redis_sytax(sql_sytax)
+        sql_log = process_sql_log(redis_log_path)
     elif database_select == "mongodb":
         pass
     elif database_select == "influxdb":
@@ -417,7 +436,6 @@ def insert_data():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/query_data', methods=['POST'])
 def query_data():
@@ -432,7 +450,10 @@ def query_data():
         sql_result = process_postgresql_sytax(query_sql)
         sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
-        pass
+        # add action to redis
+        sql_sytax = "%s?query" % query_sql
+        sql_result = process_redis_sytax(sql_sytax)
+        sql_log = process_sql_log(redis_log_path)
     elif database_select == "mongodb":
         pass
     elif database_select == "influxdb":
@@ -442,7 +463,6 @@ def query_data():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/delete_data', methods=['POST'])
 def delete_data():
@@ -458,7 +478,10 @@ def delete_data():
         sql_result = process_postgresql_sytax(sql_sytax)
         sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
-        pass
+        # add action to redis
+        sql_sytax = "%s?delete" % delete_sql
+        sql_result = process_redis_sytax(sql_sytax)
+        sql_log = process_sql_log(redis_log_path)
     elif database_select == "mongodb":
         pass
     elif database_select == "influxdb":
@@ -468,7 +491,6 @@ def delete_data():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 @app.route('/update_data', methods=['POST'])
 def update_data():
@@ -484,7 +506,10 @@ def update_data():
         sql_result = process_postgresql_sytax(sql_sytax)
         sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
-        pass
+        # add action to redis
+        sql_sytax = "%s?update" % update_sql
+        sql_result = process_redis_sytax(sql_sytax)
+        sql_log = process_sql_log(redis_log_path)
     elif database_select == "mongodb":
         pass
     elif database_select == "influxdb":
@@ -494,7 +519,6 @@ def update_data():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-    pass
 
 
 @app.route('/button_page_function', methods=['POST'])

@@ -155,9 +155,9 @@
                 <td><input type="button" value="Query_Database" onclick='query_database()'></td>
                 </tr>
             </table>
-            <table>
+            <table id="table_6">
                 <tr>
-                    <h5>6. Create Table</h5>
+                    <h5 id="h5_6">6. Create Table</h5>
                 </tr>
                 <tr>
                 <td>Table Name:</td>
@@ -168,9 +168,9 @@
                 <td><input type="button" value="Query_Table" onclick='query_table()'></td>
                 </tr>
             </table>
-            <table>
+            <table id="table_7">
                 <tr>
-                    <h5>7. Delete Table</h5>
+                    <h5 id="h5_7">7. Delete Table</h5>
                 </tr>
                  <tr>
                 <td>Table Name:</td>
@@ -657,12 +657,21 @@ function toggleElements() {
     var table_3 = document.getElementById("table_3");
     var table_4 = document.getElementById("table_4");
     var table_5 = document.getElementById("table_5");
+    var table_6 = document.getElementById("table_6");
+    var table_7 = document.getElementById("table_7");
     var h5_0 = document.getElementById("h5_0");
     var h5_1 = document.getElementById("h5_1");
     var h5_2 = document.getElementById("h5_2");
     var h5_3 = document.getElementById("h5_3");
     var h5_4 = document.getElementById("h5_4");
     var h5_5 = document.getElementById("h5_5");
+    var h5_6 = document.getElementById("h5_6");
+    var h5_7 = document.getElementById("h5_7");
+    var textbox1 = document.getElementById('log1');
+    var insert_sql = document.getElementById('insert_sql');
+    var delete_sql = document.getElementById('delete_sql');
+    var query_sql = document.getElementById('query_sql');
+    var update_sql = document.getElementById('update_sql');
 
     if (selectedOption === 'redis') {
         table_1.style.display = 'none';
@@ -670,22 +679,40 @@ function toggleElements() {
         table_3.style.display = 'none';
         table_4.style.display = 'none';
         table_5.style.display = 'none';
+        table_6.style.display = 'none';
+        table_7.style.display = 'none';
         h5_1.style.display = 'none';
         h5_2.style.display = 'none';
         h5_3.style.display = 'none';
         h5_4.style.display = 'none';
         h5_5.style.display = 'none';
+        h5_6.style.display = 'none';
+        h5_7.style.display = 'none';
+        textbox1.value = 'Redis is a NOSQL database.\nFor the function 8, input key, value. Example: product, 12\nFor the function 9, input key. Example: product\nFor the function 10, input key, new value. Example: product, 15\nFor the function 11, no need to input';
+        insert_sql.value = 'Moros, 999'
+        delete_sql.value = 'Moros'
+        query_sql.value = 'printall(key, value)'
+        update_sql.value = 'Moros, 888'
     } else {
         table_1.style.display = 'block';
         table_2.style.display = 'block';
         table_3.style.display = 'block';
         table_4.style.display = 'block';
         table_5.style.display = 'block';
+        table_6.style.display = 'block';
+        table_7.style.display = 'block';
         h5_1.style.display = 'block';
         h5_2.style.display = 'block';
         h5_3.style.display = 'block';
         h5_4.style.display = 'block';
         h5_5.style.display = 'block';
+        h5_6.style.display = 'block';
+        h5_7.style.display = 'block';
+        textbox1.value = '';
+        insert_sql.value = "USE user_info;INSERT INTO usersinfo (name, password) VALUES ('John Doe', 'mysecretpassword');"
+        delete_sql.value = "USE user_info;DELETE FROM usersinfo WHERE id IS NULL ORDER BY name DESC LIMIT 1;"
+        query_sql.value = "USE user_info;SELECT * FROM usersinfo;"
+        update_sql.value = "USE user_info;UPDATE usersinfo SET password = 'new_password' WHERE name = 'John Doe';"
     }
 }
 
