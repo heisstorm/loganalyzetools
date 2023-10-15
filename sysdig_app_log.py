@@ -2,13 +2,16 @@
 # ! /usr/bin/python
 # important: please run python server with sudo command, since normal user cannot reach sql_log_path
 # 请在服务器上使用用sudo带起此python文件，因为数据库的log普通用户拿不到
+import os
 import os.path as path
-from flask import Flask, render_template,request, send_file
+from flask import Flask, render_template,request, send_file,jsonify
 import logging
 import pymysql
 import sys
 import psycopg2
 import redis
+import subprocess
+import psutil
 
 app = Flask("sysdig_app_log")
 app.config['MYSQL_HOST'] = 'en4217394l.cidse.dhcp.asu.edu'  # 数据库地址
@@ -544,6 +547,29 @@ def button_page_function():
             return "Login Success", 200
     logging.info("the username %s from ip %s does not exist, show hint" % (username, user_ip))
     return "Login Failed, please register first", 200
+
+@app.route('/start_sysdig', methods=['GET'])
+def start_sysdig():
+    sysdig_output = "static/system_log.txt"
+    if os.path.exists(sysdig_output):
+        os.remove(sysdig_output)
+    sysdig_command = 'sysdig -p"%evt.num %evt.rawtime.s.%evt.rawtime.ns %evt.cpu %proc.name (%proc.pid) %evt.dir %evt.type cwd=%proc.cwd %evt.args latency=%evt.latency" -s 200 evt.type!=switch and proc.name!=sysdig > ' + sysdig_output
+    process = subprocess.Popen([sysdig_command], shell=True)
+    response = {"pid": process.pid}
+    return jsonify(response), 200
+@app.route('/stop_sysdig', methods=['POST'])
+def stop_sysdig():
+    try:
+        pid = request.get_json().get('pid')
+        process_to_stop = psutil.Process(pid)
+        # sysdig initiates two sequential pid
+        process_to_stop_1 = psutil.Process(pid+1)
+        process_to_stop.terminate()
+        process_to_stop_1.terminate()
+        response = {'message': f'Successfully stopped process with PID {pid}'}
+        return jsonify(response), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 200
 
 @app.route('/registerform_str', methods=['POST'])
 def registerform_str():

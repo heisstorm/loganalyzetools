@@ -40,6 +40,10 @@
             color: #777; /* Gray text color */
         }
 
+        .stop-button {
+            background-color: red;
+        }
+
         button {
             display: block;
             width: 100%;
@@ -80,8 +84,8 @@
         <td>
         <h2 style="color:green ; font-size:20px">Port: 5001(nginx load balance) <- 5010 to 5019(uwsgi)</h2>
         </td>
-        <td><input type="button" value="Start Sysdig" onclick='start_sysdig()'></td>
-        <td><input type="button" value="Stop Sysdig + Download App + System Log" onclick='get_log()'></td>
+        <td><input type="button" id="control-button" class="start-button" value="Start Sysdig" onclick="toggleAction()"></td>
+        <td><input type="button" value="Download Correspond Logs" onclick='get_log()'></td>
     </tr>
 </table>
     <div class="container">
@@ -715,6 +719,73 @@ function toggleElements() {
         update_sql.value = "USE user_info;UPDATE usersinfo SET password = 'new_password' WHERE name = 'John Doe';"
     }
 }
+
+        let isRunning = false;
+
+        function toggleAction() {
+            const button = document.getElementById("control-button");
+
+            if (isRunning) {
+                // Perform the "Stop" action via AJAX
+                performStopAction().then(() => {
+                    // Update the button to "Start" mode
+                    button.value = "Start Sysdig";
+                    button.className = "start-button";
+                    isRunning = false;
+                }).catch(error => {
+                    console.error("Error stopping: " + error);
+                });
+            } else {
+                // Perform the "Start" action via AJAX
+                performStartAction().then(() => {
+                    // Update the button to "Stop" mode
+                    button.value = "Stop Sysdig";
+                    button.className = "stop-button";
+                    isRunning = true;
+                }).catch(error => {
+                    console.error("Error starting: " + error);
+                });
+            }
+        }
+
+        let sysdig_pid = 0
+        // Simulate an AJAX function for starting
+        function performStartAction() {
+            return new Promise((resolve, reject) => {
+                // Replace this with your actual AJAX call
+                $.ajax({
+                        type: "GET",
+                        contentType: false,
+                        processData: false,
+                        url: "/start_sysdig",
+                        success: function(response) {
+                            sysdig_pid = response.pid;
+                            var textbox1 = document.getElementById('log1');
+                            textbox1.value = 'Sysdig Started\nsudo sysdig -p"%evt.num %evt.rawtime.s.%evt.rawtime.ns %evt.cpu %proc.name (%proc.pid) %evt.dir %evt.type cwd=%proc.cwd %evt.args latency=%evt.latency" -s 200 evt.type!=switch and proc.name!=sysdig > system_log.txt\npid=' + sysdig_pid
+                        }
+                    });
+                resolve();
+            });
+        }
+
+        // Simulate an AJAX function for stopping
+        function performStopAction() {
+            return new Promise((resolve, reject) => {
+                // Replace this with your actual AJAX call
+                $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        processData: false,
+                        data: JSON.stringify({ pid: sysdig_pid }),
+                        url: "/stop_sysdig",
+                        success: function() {
+                            var textbox1 = document.getElementById('log1');
+                            textbox1.value = 'Sysdig Stopped'
+                        }
+                    });
+                resolve();
+            });
+        }
 
 
 </script>
