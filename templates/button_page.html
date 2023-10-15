@@ -67,7 +67,7 @@
         </td>
         <td>
         <form action="", method="post">
-            <select name="name" id="database_select">
+            <select name="name" id="database_select" onchange="toggleElements()">
                 <option value="mysql">Mysql</option>
                 <option value="postgresql">PostgreSQL</option>
                 <option value="redis">Redis</option>
@@ -86,9 +86,9 @@
 </table>
     <div class="container">
         <div class="button-container">
-            <table>
+            <table id="table_0">
                 <tr>
-                    <h5>0. DO EVERYTHING BELOW</h5>
+                    <h5 id="h5_0">0. DO EVERYTHING BELOW</h5>
                 </tr>
                 <tr>
                 <td>Frequency:</td>
@@ -96,9 +96,9 @@
                 <td><input type="button" value="Submit" onclick='submit_everything()'></td>
                 </tr>
             </table>
-            <table>
+            <table id="table_1">
                 <tr>
-                    <h5>1. Create Database User</h5>
+                    <h5 id="h5_1">1. Create Database User</h5>
                 </tr>
                 <tr>
                 <td>UserName:</td>
@@ -109,9 +109,9 @@
                 <td><input type="button" value="Query_DB_User" onclick='query_db_user()'></td>
                 </tr>
             </table>
-            <table>
+            <table id="table_2">
                 <tr>
-                    <h5>2. Delete Database User</h5>
+                    <h5 id="h5_2">2. Delete Database User</h5>
                 </tr>
                 <tr>
                 <td>UserName:</td>
@@ -120,9 +120,9 @@
                 <td><input type="button" value="Query_DB_User" onclick='query_db_user()'></td>
                 </tr>
             </table>
-            <table>
+            <table id="table_3">
                 <tr>
-                    <h5>3. Change Database Password</h5>
+                    <h5 id="h5_3">3. Change Database Password</h5>
                 </tr>
                 <tr>
                 <td>UserName:</td>
@@ -133,9 +133,9 @@
                 <td><input type="button" value="Query_DB_User_Password(MD5)" onclick='query_db_user_password()'></td>
                 </tr>
             </table>
-            <table>
+            <table id="table_4">
                 <tr>
-                    <h5>4. Create Database</h5>
+                    <h5 id="h5_4">4. Create Database</h5>
                 </tr>
                 <tr>
                 <td>Database Name:</td>
@@ -144,9 +144,9 @@
                 <td><input type="button" value="Query_Database" onclick='query_database()'></td>
                 </tr>
             </table>
-            <table>
+            <table id="table_5">
                 <tr>
-                    <h5>5. Delete Database</h5>
+                    <h5 id="h5_5">5. Delete Database</h5>
                 </tr>
                 <tr>
                 <td>Database Name:</td>
@@ -649,6 +649,45 @@ function update_data() {
     });
 }
 
+function toggleElements() {
+    var selectedOption = document.getElementById("database_select").value;
+    var table_0 = document.getElementById("table_0");
+    var table_1 = document.getElementById("table_1");
+    var table_2 = document.getElementById("table_2");
+    var table_3 = document.getElementById("table_3");
+    var table_4 = document.getElementById("table_4");
+    var table_5 = document.getElementById("table_5");
+    var h5_0 = document.getElementById("h5_0");
+    var h5_1 = document.getElementById("h5_1");
+    var h5_2 = document.getElementById("h5_2");
+    var h5_3 = document.getElementById("h5_3");
+    var h5_4 = document.getElementById("h5_4");
+    var h5_5 = document.getElementById("h5_5");
+
+    if (selectedOption === 'redis') {
+        table_1.style.display = 'none';
+        table_2.style.display = 'none';
+        table_3.style.display = 'none';
+        table_4.style.display = 'none';
+        table_5.style.display = 'none';
+        h5_1.style.display = 'none';
+        h5_2.style.display = 'none';
+        h5_3.style.display = 'none';
+        h5_4.style.display = 'none';
+        h5_5.style.display = 'none';
+    } else {
+        table_1.style.display = 'block';
+        table_2.style.display = 'block';
+        table_3.style.display = 'block';
+        table_4.style.display = 'block';
+        table_5.style.display = 'block';
+        h5_1.style.display = 'block';
+        h5_2.style.display = 'block';
+        h5_3.style.display = 'block';
+        h5_4.style.display = 'block';
+        h5_5.style.display = 'block';
+    }
+}
 
 
 </script>
