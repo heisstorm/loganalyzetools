@@ -122,20 +122,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>3. Database Login Logout</h5>
-                </tr>
-                <tr>
-                <td>UserName:</td>
-                <td><input type="text" name="" id="db_uname_login" class="grayed-out" value="wangdali"></td>
-                <td>Password:</td>
-                <td><input type="text" name="" id="db_pwd_login" class="grayed-out" value="asu123!@#"></td>
-                <td><input type="button" value="Login" onclick='db_login()'></td>
-                <td><input type="button" value="Logout" onclick='db_logout()'></td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <h5>4. Change Database Password</h5>
+                    <h5>3. Change Database Password</h5>
                 </tr>
                 <tr>
                 <td>UserName:</td>
@@ -148,7 +135,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>5. Create Database</h5>
+                    <h5>4. Create Database</h5>
                 </tr>
                 <tr>
                 <td>Database Name:</td>
@@ -159,7 +146,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>6. Delete Database</h5>
+                    <h5>5. Delete Database</h5>
                 </tr>
                 <tr>
                 <td>Database Name:</td>
@@ -170,7 +157,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>7. Create Table</h5>
+                    <h5>6. Create Table</h5>
                 </tr>
                 <tr>
                 <td>Table Name:</td>
@@ -183,7 +170,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>8. Delete Table</h5>
+                    <h5>7. Delete Table</h5>
                 </tr>
                  <tr>
                 <td>Table Name:</td>
@@ -194,7 +181,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>9. Insert Data Row</h5>
+                    <h5>8. Insert Data Row</h5>
                 </tr>
                 <tr>
                 <td>Insert SQL:</td>
@@ -205,7 +192,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>10. Delete Data Row</h5>
+                    <h5>9. Delete Data Row</h5>
                 </tr>
                 <tr>
                 <td>Delete SQL:</td>
@@ -216,7 +203,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>11. Update Data Row</h5>
+                    <h5>10. Update Data Row</h5>
                 </tr>
                 <tr>
                 <td>Update SQL:</td>
@@ -227,7 +214,7 @@
             </table>
             <table>
                 <tr>
-                    <h5>12. Query Data Row</h5>
+                    <h5>11. Query Data Row</h5>
                 </tr>
                 <tr>
                 <td>Query SQL:</td>
@@ -337,59 +324,6 @@ function delete_db_user() {
         contentType: false,
         processData: false,
         url: "/delete_db_user" ,
-        data: formData,
-        success: function(data) {
-            var textbox1 = document.getElementById('log1');
-            var textbox2 = document.getElementById('log2');
-            textbox2.value = data.sql_result;
-            textbox1.value = data.sql_log;
-            textbox1.selectionStart = textbox1.value.length;
-            textbox1.selectionEnd = textbox1.value.length;
-            textbox1.focus();
-        },
-        error: function(xhr, status, error) {
-        console.error(status + " - " + error);
-        }
-    });
-}
-
-function db_login() {
-    let formData = new FormData()
-    formData.append('database_select', document.getElementById('database_select').value)
-    formData.append('db_uname_login', document.getElementById('db_uname_login').value)
-    formData.append('db_pwd_login', document.getElementById('db_pwd_login').value)
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        contentType: false,
-        processData: false,
-        url: "/db_login" ,
-        data: formData,
-        success: function(data) {
-            var textbox1 = document.getElementById('log1');
-            var textbox2 = document.getElementById('log2');
-            textbox2.value = data.sql_result;
-            textbox1.value = data.sql_log;
-            textbox1.selectionStart = textbox1.value.length;
-            textbox1.selectionEnd = textbox1.value.length;
-            textbox1.focus();
-        },
-        error: function(xhr, status, error) {
-        console.error(status + " - " + error);
-        }
-    });
-}
-
-function db_logout() {
-    let formData = new FormData()
-    formData.append('database_select', document.getElementById('database_select').value)
-    formData.append('db_uname_login', document.getElementById('db_uname_login').value)
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        contentType: false,
-        processData: false,
-        url: "/db_logout" ,
         data: formData,
         success: function(data) {
             var textbox1 = document.getElementById('log1');

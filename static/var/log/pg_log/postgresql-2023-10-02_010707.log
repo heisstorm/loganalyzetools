@@ -1,0 +1,391 @@
+2023-10-02 01:07:07.391 MST [2463971] LOG:  starting PostgreSQL 15.4 (Ubuntu 15.4-1.pgdg20.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, 64-bit
+2023-10-02 01:07:07.391 MST [2463971] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2023-10-02 01:07:07.391 MST [2463971] LOG:  listening on IPv6 address "::", port 5432
+2023-10-02 01:07:07.392 MST [2463971] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2023-10-02 01:07:07.395 MST [2463975] LOG:  database system was shut down at 2023-10-02 01:07:07 MST
+2023-10-02 01:07:07.400 MST [2463971] LOG:  database system is ready to accept connections
+2023-10-02 01:07:07.977 MST [2463980] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:08.485 MST [2463989] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:08.996 MST [2463992] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:09.507 MST [2464011] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:10.019 MST [2464014] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:10.530 MST [2464028] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:11.041 MST [2464033] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:11.553 MST [2464039] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:12.064 MST [2464048] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:12.576 MST [2464051] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:13.087 MST [2464060] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:13.599 MST [2464063] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:13.603 MST [2464064] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:19.923 MST [2464131] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:22.506 MST [2464155] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:22.511 MST [2464155] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:07:22.511 MST [2464155] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:07:24.829 MST [2464155] postgres@postgres LOG:  statement: SELECT d.datname as "Name",
+	       pg_catalog.pg_get_userbyid(d.datdba) as "Owner",
+	       pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding",
+	       d.datcollate as "Collate",
+	       d.datctype as "Ctype",
+	       d.daticulocale as "ICU Locale",
+	       CASE d.datlocprovider WHEN 'c' THEN 'libc' WHEN 'i' THEN 'icu' END AS "Locale Provider",
+	       pg_catalog.array_to_string(d.datacl, E'\n') AS "Access privileges"
+	FROM pg_catalog.pg_database d
+	ORDER BY 1;
+2023-10-02 01:07:24.837 MST [2464155] postgres@postgres LOG:  duration: 8.785 ms
+2023-10-02 01:07:32.707 MST [2464155] postgres@postgres LOG:  statement: SELECT datname FROM pg_catalog.pg_database  WHERE datname LIKE 'trac%'
+	LIMIT 1000
+2023-10-02 01:07:32.714 MST [2464155] postgres@postgres LOG:  duration: 7.301 ms
+2023-10-02 01:07:33.202 MST [2464255] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:07:33.204 MST [2464255] postgres@trace LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:07:33.204 MST [2464255] postgres@trace LOG:  connection authorized: user=postgres database=trace application_name=psql
+2023-10-02 01:07:33.204 MST [2464155] postgres@postgres LOG:  disconnection: session time: 0:00:10.699 user=postgres database=postgres host=[local]
+2023-10-02 01:07:36.428 MST [2464255] postgres@trace LOG:  statement: SELECT d.datname as "Name",
+	       pg_catalog.pg_get_userbyid(d.datdba) as "Owner",
+	       pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding",
+	       d.datcollate as "Collate",
+	       d.datctype as "Ctype",
+	       d.daticulocale as "ICU Locale",
+	       CASE d.datlocprovider WHEN 'c' THEN 'libc' WHEN 'i' THEN 'icu' END AS "Locale Provider",
+	       pg_catalog.array_to_string(d.datacl, E'\n') AS "Access privileges"
+	FROM pg_catalog.pg_database d
+	ORDER BY 1;
+2023-10-02 01:07:36.440 MST [2464255] postgres@trace LOG:  duration: 11.893 ms
+2023-10-02 01:07:59.236 MST [2464255] postgres@trace LOG:  statement: SELECT c.relname, NULL::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.relkind IN ('r', 'S', 'v', 'm', 'f', 'p') AND (c.relname) LIKE 'pos%' AND pg_catalog.pg_table_is_visible(c.oid) AND c.relnamespace <> (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = 'pg_catalog')
+	UNION ALL
+	SELECT NULL::pg_catalog.text, n.nspname FROM pg_catalog.pg_namespace n WHERE n.nspname LIKE 'pos%' AND n.nspname NOT LIKE E'pg\\_%'
+	LIMIT 1000
+2023-10-02 01:07:59.241 MST [2464255] postgres@trace LOG:  duration: 10.332 ms
+2023-10-02 01:08:01.883 MST [2464255] postgres@trace LOG:  statement: SELECT c.relname, NULL::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.relkind IN ('r', 'S', 'v', 'm', 'f', 'p') AND (c.relname) LIKE 'postgres%' AND pg_catalog.pg_table_is_visible(c.oid) AND c.relnamespace <> (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = 'pg_catalog')
+	UNION ALL
+	SELECT NULL::pg_catalog.text, n.nspname FROM pg_catalog.pg_namespace n WHERE n.nspname LIKE 'postgres%' AND n.nspname NOT LIKE E'pg\\_%'
+	LIMIT 1000
+2023-10-02 01:08:01.883 MST [2464255] postgres@trace LOG:  duration: 0.575 ms
+2023-10-02 01:08:13.110 MST [2464255] postgres@trace LOG:  statement: select * from trace
+	;
+2023-10-02 01:08:13.110 MST [2464255] postgres@trace ERROR:  relation "trace" does not exist at character 15
+2023-10-02 01:08:13.110 MST [2464255] postgres@trace STATEMENT:  select * from trace
+	;
+2023-10-02 01:08:58.161 MST [2464255] postgres@trace LOG:  statement: show log_statement;
+2023-10-02 01:08:58.161 MST [2464255] postgres@trace LOG:  duration: 0.101 ms
+2023-10-02 01:11:44.096 MST [2464255] postgres@trace LOG:  statement: SELECT datname FROM pg_catalog.pg_database  WHERE datname LIKE 'postgres%'
+	LIMIT 1000
+2023-10-02 01:11:44.096 MST [2464255] postgres@trace LOG:  duration: 0.239 ms
+2023-10-02 01:11:44.350 MST [2466561] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:11:44.355 MST [2466561] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:11:44.355 MST [2466561] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:11:44.356 MST [2464255] postgres@trace LOG:  disconnection: session time: 0:04:11.153 user=postgres database=trace host=[local]
+2023-10-02 01:12:07.495 MST [2463973] LOG:  checkpoint starting: time
+2023-10-02 01:12:07.506 MST [2463973] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.012 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB
+2023-10-02 01:12:10.909 MST [2466561] postgres@postgres LOG:  statement: SHOW ALL
+	;
+2023-10-02 01:12:10.910 MST [2466561] postgres@postgres LOG:  duration: 0.763 ms
+2023-10-02 01:14:12.117 MST [2466561] postgres@postgres LOG:  disconnection: session time: 0:02:27.766 user=postgres database=postgres host=[local]
+2023-10-02 01:14:22.208 MST [2468012] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:14:24.894 MST [2468037] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:14:24.900 MST [2468037] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:14:24.900 MST [2468037] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:15:56.775 MST [2468037] postgres@postgres LOG:  statement: CREATE USER shijielu1 WITH PASSWORD 'password';
+2023-10-02 01:15:56.784 MST [2468037] postgres@postgres LOG:  duration: 9.455 ms
+2023-10-02 01:17:07.606 MST [2463973] LOG:  checkpoint starting: time
+2023-10-02 01:17:07.925 MST [2463973] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.303 s, sync=0.007 s, total=0.319 s; sync files=4, longest=0.006 s, average=0.002 s; distance=5 kB, estimate=5 kB
+2023-10-02 01:18:08.560 MST [2468037] postgres@postgres LOG:  statement: CREATE USER shijielu2 WITH PASSWORD 'password';
+2023-10-02 01:18:08.569 MST [2468037] postgres@postgres LOG:  duration: 8.892 ms
+2023-10-02 01:18:11.878 MST [2468037] postgres@postgres LOG:  statement: CREATE USER shijielu3 WITH PASSWORD 'password';
+2023-10-02 01:18:11.887 MST [2468037] postgres@postgres LOG:  duration: 9.176 ms
+2023-10-02 01:18:15.986 MST [2468037] postgres@postgres LOG:  statement: CREATE USER shijielu4 WITH PASSWORD 'password';
+2023-10-02 01:18:15.995 MST [2468037] postgres@postgres LOG:  duration: 8.880 ms
+2023-10-02 01:18:19.486 MST [2468037] postgres@postgres LOG:  statement: CREATE USER shijielu5 WITH PASSWORD 'password';
+2023-10-02 01:18:19.495 MST [2468037] postgres@postgres LOG:  duration: 8.907 ms
+2023-10-02 01:18:23.162 MST [2468037] postgres@postgres LOG:  statement: CREATE USER shijielu WITH PASSWORD 'password';
+2023-10-02 01:18:23.167 MST [2468037] postgres@postgres ERROR:  role "shijielu" already exists
+2023-10-02 01:18:23.167 MST [2468037] postgres@postgres STATEMENT:  CREATE USER shijielu WITH PASSWORD 'password';
+2023-10-02 01:18:26.596 MST [2468037] postgres@postgres LOG:  statement: CREATE USER shijielu6 WITH PASSWORD 'password';
+2023-10-02 01:18:26.605 MST [2468037] postgres@postgres LOG:  duration: 9.179 ms
+2023-10-02 01:21:28.462 MST [2468037] postgres@postgres ERROR:  syntax error at or near "drop" at character 22
+2023-10-02 01:21:28.462 MST [2468037] postgres@postgres STATEMENT:  drop role shijielu1
+	 drop role shijielu2;
+2023-10-02 01:21:36.838 MST [2468037] postgres@postgres LOG:  statement: drop role shijielu2;
+2023-10-02 01:21:36.842 MST [2468037] postgres@postgres LOG:  duration: 3.580 ms
+2023-10-02 01:21:38.948 MST [2468037] postgres@postgres LOG:  statement: drop role shijielu3;
+2023-10-02 01:21:38.953 MST [2468037] postgres@postgres LOG:  duration: 5.313 ms
+2023-10-02 01:21:41.060 MST [2468037] postgres@postgres LOG:  statement: drop role shijielu4;
+2023-10-02 01:21:41.061 MST [2468037] postgres@postgres LOG:  duration: 0.700 ms
+2023-10-02 01:21:43.095 MST [2468037] postgres@postgres LOG:  statement: drop role shijielu5;
+2023-10-02 01:21:43.095 MST [2468037] postgres@postgres LOG:  duration: 0.847 ms
+2023-10-02 01:21:44.948 MST [2468037] postgres@postgres LOG:  statement: drop role shijielu6;
+2023-10-02 01:21:44.953 MST [2468037] postgres@postgres LOG:  duration: 5.205 ms
+2023-10-02 01:22:08.008 MST [2463973] LOG:  checkpoint starting: time
+2023-10-02 01:22:08.322 MST [2463973] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.303 s, sync=0.007 s, total=0.314 s; sync files=4, longest=0.006 s, average=0.002 s; distance=8 kB, estimate=8 kB
+2023-10-02 01:22:35.456 MST [2468037] postgres@postgres LOG:  statement: SELECT usename FROM pg_user;
+2023-10-02 01:22:35.462 MST [2468037] postgres@postgres LOG:  duration: 6.577 ms
+2023-10-02 01:22:44.060 MST [2468037] postgres@postgres LOG:  statement: drop role uuu111;
+2023-10-02 01:22:44.065 MST [2468037] postgres@postgres LOG:  duration: 5.266 ms
+2023-10-02 01:22:54.612 MST [2468037] postgres@postgres LOG:  statement: drop role shijielu1;
+2023-10-02 01:22:54.618 MST [2468037] postgres@postgres LOG:  duration: 5.495 ms
+2023-10-02 01:27:08.384 MST [2463973] LOG:  checkpoint starting: time
+2023-10-02 01:27:08.496 MST [2463973] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.102 s, sync=0.002 s, total=0.112 s; sync files=2, longest=0.002 s, average=0.001 s; distance=5 kB, estimate=8 kB
+2023-10-02 01:27:09.188 MST [2468037] postgres@postgres LOG:  disconnection: session time: 0:12:44.294 user=postgres database=postgres host=[local]
+2023-10-02 01:27:10.572 MST [2475440] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:12.835 MST [2475453] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:12.841 MST [2475453] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:27:12.841 MST [2475453] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:27:14.283 MST [2475453] postgres@postgres LOG:  disconnection: session time: 0:00:01.447 user=postgres database=postgres host=[local]
+2023-10-02 01:27:16.213 MST [2475494] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:18.122 MST [2475502] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:18.127 MST [2475502] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:27:18.127 MST [2475502] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:27:20.591 MST [2475502] postgres@postgres LOG:  disconnection: session time: 0:00:02.469 user=postgres database=postgres host=[local]
+2023-10-02 01:27:22.120 MST [2475544] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:23.780 MST [2475557] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:23.783 MST [2475557] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:27:23.783 MST [2475557] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:27:25.329 MST [2475557] postgres@postgres LOG:  disconnection: session time: 0:00:01.549 user=postgres database=postgres host=[local]
+2023-10-02 01:27:27.075 MST [2475594] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:28.874 MST [2475608] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:28.879 MST [2475608] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:27:28.879 MST [2475608] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:27:30.374 MST [2475608] postgres@postgres LOG:  disconnection: session time: 0:00:01.500 user=postgres database=postgres host=[local]
+2023-10-02 01:27:31.714 MST [2475643] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:33.312 MST [2475656] [unknown]@[unknown] LOG:  connection received: host=[local]
+2023-10-02 01:27:33.317 MST [2475656] postgres@postgres LOG:  connection authenticated: identity="postgres" method=md5 (/etc/postgresql/15/main/pg_hba.conf:90)
+2023-10-02 01:27:33.317 MST [2475656] postgres@postgres LOG:  connection authorized: user=postgres database=postgres application_name=psql
+2023-10-02 01:29:15.535 MST [2475656] postgres@postgres LOG:  statement: CREATE USER shijielu1 WITH PASSWORD 'password';
+2023-10-02 01:29:15.544 MST [2475656] postgres@postgres LOG:  duration: 9.378 ms
+2023-10-02 01:31:08.536 MST [2475656] postgres@postgres LOG:  statement: alter user shijielu1 with password '1231';
+2023-10-02 01:31:08.540 MST [2475656] postgres@postgres LOG:  duration: 4.130 ms
+2023-10-02 01:31:20.493 MST [2475656] postgres@postgres LOG:  statement: alter user shijielu1 with password '12311';
+2023-10-02 01:31:20.502 MST [2475656] postgres@postgres LOG:  duration: 8.746 ms
+2023-10-02 01:31:22.805 MST [2475656] postgres@postgres LOG:  statement: alter user shijielu1 with password '123131';
+2023-10-02 01:31:22.814 MST [2475656] postgres@postgres LOG:  duration: 8.732 ms
+2023-10-02 01:31:24.671 MST [2475656] postgres@postgres LOG:  statement: alter user shijielu1 with password '1231431';
+2023-10-02 01:31:24.674 MST [2475656] postgres@postgres LOG:  duration: 2.508 ms
+2023-10-02 01:31:26.331 MST [2475656] postgres@postgres LOG:  statement: alter user shijielu1 with password '12314331';
+2023-10-02 01:31:26.339 MST [2475656] postgres@postgres LOG:  duration: 8.605 ms
+2023-10-02 01:31:28.214 MST [2475656] postgres@postgres LOG:  statement: alter user shijielu1 with password '123143431';
+2023-10-02 01:31:28.222 MST [2475656] postgres@postgres LOG:  duration: 8.723 ms
+2023-10-02 01:31:29.711 MST [2475656] postgres@postgres LOG:  statement: alter user shijielu1 with password '1231434531';
+2023-10-02 01:31:29.720 MST [2475656] postgres@postgres LOG:  duration: 8.738 ms
+2023-10-02 01:32:08.596 MST [2463973] LOG:  checkpoint starting: time
+2023-10-02 01:32:08.912 MST [2463973] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.302 s, sync=0.006 s, total=0.316 s; sync files=4, longest=0.006 s, average=0.002 s; distance=9 kB, estimate=9 kB
+2023-10-02 01:32:30.183 MST [2475656] postgres@postgres LOG:  statement: drop role shijielu1;
+2023-10-02 01:32:30.189 MST [2475656] postgres@postgres LOG:  duration: 5.614 ms
+2023-10-02 01:33:06.380 MST [2475656] postgres@postgres LOG:  statement: CREATE DATABASE dbnam1;
+2023-10-02 01:33:06.445 MST [2475656] postgres@postgres LOG:  duration: 65.893 ms
+2023-10-02 01:33:08.706 MST [2475656] postgres@postgres LOG:  statement: CREATE DATABASE dbnam2;
+2023-10-02 01:33:08.731 MST [2475656] postgres@postgres LOG:  duration: 25.557 ms
+2023-10-02 01:33:10.333 MST [2475656] postgres@postgres LOG:  statement: CREATE DATABASE dbnam3;
+2023-10-02 01:33:10.361 MST [2475656] postgres@postgres LOG:  duration: 27.709 ms
+2023-10-02 01:33:11.837 MST [2475656] postgres@postgres LOG:  statement: CREATE DATABASE dbnam4;
+2023-10-02 01:33:11.862 MST [2475656] postgres@postgres LOG:  duration: 24.389 ms
+2023-10-02 01:33:13.192 MST [2475656] postgres@postgres LOG:  statement: CREATE DATABASE dbnam5;
+2023-10-02 01:33:13.218 MST [2475656] postgres@postgres LOG:  duration: 25.968 ms
+2023-10-02 01:33:14.756 MST [2475656] postgres@postgres LOG:  statement: CREATE DATABASE dbnam6;
+2023-10-02 01:33:14.785 MST [2475656] postgres@postgres LOG:  duration: 29.626 ms
+2023-10-02 01:34:49.790 MST [2475656] postgres@postgres ERROR:  syntax error at or near "[" at character 15
+2023-10-02 01:34:49.790 MST [2475656] postgres@postgres STATEMENT:  DROP DATABASE [ IF EXISTS ] dbnam1
+	;
+2023-10-02 01:35:10.778 MST [2475656] postgres@postgres LOG:  statement: DROP DATABASE IF EXISTS dbnam1;
+2023-10-02 01:35:10.784 MST [2463973] LOG:  checkpoint starting: immediate force wait
+2023-10-02 01:35:10.853 MST [2463973] LOG:  checkpoint complete: wrote 4620 buffers (28.2%); 0 WAL file(s) added, 2 removed, 0 recycled; write=0.034 s, sync=0.028 s, total=0.069 s; sync files=1485, longest=0.001 s, average=0.001 s; distance=25325 kB, estimate=25325 kB
+2023-10-02 01:35:10.858 MST [2475656] postgres@postgres LOG:  duration: 80.361 ms
+2023-10-02 01:35:13.545 MST [2475656] postgres@postgres LOG:  statement: DROP DATABASE IF EXISTS dbnam2;
+2023-10-02 01:35:13.551 MST [2463973] LOG:  checkpoint starting: immediate force wait
+2023-10-02 01:35:13.557 MST [2463973] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.007 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=22793 kB
+2023-10-02 01:35:13.565 MST [2475656] postgres@postgres LOG:  duration: 19.871 ms
+2023-10-02 01:35:15.179 MST [2475656] postgres@postgres LOG:  statement: DROP DATABASE IF EXISTS dbnam3;
+2023-10-02 01:35:15.185 MST [2463973] LOG:  checkpoint starting: immediate force wait
+2023-10-02 01:35:15.191 MST [2463973] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.007 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=20514 kB
+2023-10-02 01:35:15.198 MST [2475656] postgres@postgres LOG:  duration: 19.175 ms
+2023-10-02 01:35:17.234 MST [2475656] postgres@postgres LOG:  statement: DROP DATABASE IF EXISTS dbnam4;
+2023-10-02 01:35:17.240 MST [2463973] LOG:  checkpoint starting: immediate force wait
+2023-10-02 01:35:17.246 MST [2463973] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.007 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=18463 kB
+2023-10-02 01:35:17.255 MST [2475656] postgres@postgres LOG:  duration: 20.559 ms
+2023-10-02 01:35:19.035 MST [2475656] postgres@postgres LOG:  statement: DROP DATABASE IF EXISTS dbnam5;
+2023-10-02 01:35:19.041 MST [2463973] LOG:  checkpoint starting: immediate force wait
+2023-10-02 01:35:19.046 MST [2463973] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.006 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=16617 kB
+2023-10-02 01:35:19.054 MST [2475656] postgres@postgres LOG:  duration: 19.039 ms
+2023-10-02 01:35:21.238 MST [2475656] postgres@postgres LOG:  statement: DROP DATABASE IF EXISTS dbnam6;
+2023-10-02 01:35:21.239 MST [2463973] LOG:  checkpoint starting: immediate force wait
+2023-10-02 01:35:21.246 MST [2463973] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.001 s, total=0.008 s; sync files=2, longest=0.001 s, average=0.001 s; distance=2 kB, estimate=14955 kB
+2023-10-02 01:35:21.254 MST [2475656] postgres@postgres LOG:  duration: 16.599 ms
+2023-10-02 01:36:38.815 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:36:38.826 MST [2475656] postgres@postgres LOG:  duration: 17.155 ms
+2023-10-02 01:37:03.053 MST [2475656] postgres@postgres ERROR:  syntax error at or near "TABLE1" at character 8
+2023-10-02 01:37:03.053 MST [2475656] postgres@postgres STATEMENT:  CREATE TABLE1 COMPANY(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:37:15.351 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY1(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:37:15.360 MST [2475656] postgres@postgres LOG:  duration: 8.867 ms
+2023-10-02 01:37:24.904 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY2(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:37:24.914 MST [2475656] postgres@postgres LOG:  duration: 9.951 ms
+2023-10-02 01:37:33.348 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY3(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:37:33.357 MST [2475656] postgres@postgres LOG:  duration: 8.981 ms
+2023-10-02 01:37:41.584 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY4(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:37:41.592 MST [2475656] postgres@postgres LOG:  duration: 8.270 ms
+2023-10-02 01:37:49.709 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY5(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:37:49.719 MST [2475656] postgres@postgres LOG:  duration: 9.858 ms
+2023-10-02 01:37:57.902 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY6(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:37:57.913 MST [2475656] postgres@postgres LOG:  duration: 11.258 ms
+2023-10-02 01:38:51.228 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY6;
+2023-10-02 01:38:51.236 MST [2475656] postgres@postgres LOG:  duration: 8.043 ms
+2023-10-02 01:38:53.592 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY5;
+2023-10-02 01:38:53.598 MST [2475656] postgres@postgres LOG:  duration: 6.132 ms
+2023-10-02 01:38:55.183 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY4;
+2023-10-02 01:38:55.189 MST [2475656] postgres@postgres LOG:  duration: 6.093 ms
+2023-10-02 01:38:56.682 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY3;
+2023-10-02 01:38:56.688 MST [2475656] postgres@postgres LOG:  duration: 6.095 ms
+2023-10-02 01:38:58.692 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY2;
+2023-10-02 01:38:58.698 MST [2475656] postgres@postgres LOG:  duration: 6.231 ms
+2023-10-02 01:39:00.568 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY1;
+2023-10-02 01:39:00.574 MST [2475656] postgres@postgres LOG:  duration: 6.696 ms
+2023-10-02 01:39:01.843 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY;
+2023-10-02 01:39:01.849 MST [2475656] postgres@postgres LOG:  duration: 6.041 ms
+2023-10-02 01:40:21.273 MST [2463973] LOG:  checkpoint starting: time
+2023-10-02 01:40:24.930 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL
+	);
+2023-10-02 01:40:24.939 MST [2475656] postgres@postgres LOG:  duration: 9.500 ms
+2023-10-02 01:40:28.218 MST [2463973] LOG:  checkpoint complete: wrote 70 buffers (0.4%); 0 WAL file(s) added, 0 removed, 0 recycled; write=6.927 s, sync=0.009 s, total=6.946 s; sync files=66, longest=0.006 s, average=0.001 s; distance=460 kB, estimate=13506 kB
+2023-10-02 01:40:42.938 MST [2475656] postgres@postgres LOG:  statement: DROP TABLE COMPANY;
+2023-10-02 01:40:42.945 MST [2475656] postgres@postgres LOG:  duration: 6.414 ms
+2023-10-02 01:40:45.282 MST [2475656] postgres@postgres LOG:  statement: CREATE TABLE COMPANY(
+	   ID INT PRIMARY KEY     NOT NULL,
+	   NAME           TEXT    NOT NULL,
+	   AGE            INT     NOT NULL,
+	   ADDRESS        CHAR(50),
+	   SALARY         REAL,
+	   JOIN_DATE      DATE
+	);
+2023-10-02 01:40:45.292 MST [2475656] postgres@postgres LOG:  duration: 9.736 ms
+2023-10-02 01:41:08.389 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (1, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:08.390 MST [2475656] postgres@postgres LOG:  duration: 7.080 ms
+2023-10-02 01:41:12.297 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (1, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:12.298 MST [2475656] postgres@postgres ERROR:  duplicate key value violates unique constraint "company_pkey"
+2023-10-02 01:41:12.298 MST [2475656] postgres@postgres DETAIL:  Key (id)=(1) already exists.
+2023-10-02 01:41:12.298 MST [2475656] postgres@postgres STATEMENT:  INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (1, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:27.040 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (2, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:27.045 MST [2475656] postgres@postgres LOG:  duration: 5.872 ms
+2023-10-02 01:41:42.026 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (3, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:42.031 MST [2475656] postgres@postgres LOG:  duration: 5.402 ms
+2023-10-02 01:41:46.700 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (4, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:46.705 MST [2475656] postgres@postgres LOG:  duration: 5.387 ms
+2023-10-02 01:41:50.767 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (5, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:50.773 MST [2475656] postgres@postgres LOG:  duration: 5.300 ms
+2023-10-02 01:41:55.065 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (6, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:55.071 MST [2475656] postgres@postgres LOG:  duration: 5.854 ms
+2023-10-02 01:41:59.393 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (7, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:41:59.398 MST [2475656] postgres@postgres LOG:  duration: 5.360 ms
+2023-10-02 01:42:03.645 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (8, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:42:03.651 MST [2475656] postgres@postgres LOG:  duration: 5.401 ms
+2023-10-02 01:42:07.470 MST [2475656] postgres@postgres LOG:  statement: INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (9, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+2023-10-02 01:42:07.475 MST [2475656] postgres@postgres LOG:  duration: 5.432 ms
+2023-10-02 01:43:25.630 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 9;
+2023-10-02 01:43:25.636 MST [2475656] postgres@postgres LOG:  duration: 6.155 ms
+2023-10-02 01:43:44.193 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 8;
+2023-10-02 01:43:44.198 MST [2475656] postgres@postgres LOG:  duration: 5.153 ms
+2023-10-02 01:43:45.781 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 7;
+2023-10-02 01:43:45.787 MST [2475656] postgres@postgres LOG:  duration: 5.425 ms
+2023-10-02 01:43:47.750 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 6;
+2023-10-02 01:43:47.755 MST [2475656] postgres@postgres LOG:  duration: 5.444 ms
+2023-10-02 01:43:50.792 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 5;
+2023-10-02 01:43:50.798 MST [2475656] postgres@postgres LOG:  duration: 5.692 ms
+2023-10-02 01:43:52.776 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 4;
+2023-10-02 01:43:52.781 MST [2475656] postgres@postgres LOG:  duration: 5.881 ms
+2023-10-02 01:43:54.389 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 3;
+2023-10-02 01:43:54.394 MST [2475656] postgres@postgres LOG:  duration: 5.237 ms
+2023-10-02 01:43:58.222 MST [2475656] postgres@postgres LOG:  statement: DELETE FROM COMPANY WHERE ID = 2;
+2023-10-02 01:43:58.227 MST [2475656] postgres@postgres LOG:  duration: 5.409 ms
+2023-10-02 01:44:43.669 MST [2475656] postgres@postgres ERROR:  syntax error at or near "runoobdb" at character 1
+2023-10-02 01:44:43.669 MST [2475656] postgres@postgres STATEMENT:  runoobdb=# UPDATE COMPANY SET SALARY = 15000 WHERE ID = 1;
+2023-10-02 01:44:50.509 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 15000 WHERE ID = 1;
+2023-10-02 01:44:50.515 MST [2475656] postgres@postgres LOG:  duration: 5.574 ms
+2023-10-02 01:45:07.318 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 15000 WHERE ID = 1;
+2023-10-02 01:45:07.323 MST [2475656] postgres@postgres LOG:  duration: 5.490 ms
+2023-10-02 01:45:09.391 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 15000 WHERE ID = 2;
+2023-10-02 01:45:09.391 MST [2475656] postgres@postgres LOG:  duration: 0.275 ms
+2023-10-02 01:45:11.698 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 15000 WHERE ID = 3;
+2023-10-02 01:45:11.698 MST [2475656] postgres@postgres LOG:  duration: 0.260 ms
+2023-10-02 01:45:16.251 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 15001 WHERE ID = 1;
+2023-10-02 01:45:16.257 MST [2475656] postgres@postgres LOG:  duration: 5.658 ms
+2023-10-02 01:45:19.032 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 15201 WHERE ID = 1;
+2023-10-02 01:45:19.037 MST [2475656] postgres@postgres LOG:  duration: 5.597 ms
+2023-10-02 01:45:21.312 MST [2463973] LOG:  checkpoint starting: time
+2023-10-02 01:45:21.786 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 14201 WHERE ID = 1;
+2023-10-02 01:45:21.792 MST [2475656] postgres@postgres LOG:  duration: 5.712 ms
+2023-10-02 01:45:24.447 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 14401 WHERE ID = 1;
+2023-10-02 01:45:24.449 MST [2475656] postgres@postgres LOG:  duration: 1.245 ms
+2023-10-02 01:45:26.347 MST [2463973] LOG:  checkpoint complete: wrote 51 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=5.023 s, sync=0.003 s, total=5.035 s; sync files=32, longest=0.001 s, average=0.001 s; distance=244 kB, estimate=12179 kB
+2023-10-02 01:45:28.091 MST [2475656] postgres@postgres LOG:  statement: UPDATE COMPANY SET SALARY = 14501 WHERE ID = 1;
+2023-10-02 01:45:28.096 MST [2475656] postgres@postgres LOG:  duration: 5.327 ms
+2023-10-02 01:46:15.623 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:15.623 MST [2475656] postgres@postgres LOG:  duration: 0.206 ms
+2023-10-02 01:46:31.429 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:31.429 MST [2475656] postgres@postgres LOG:  duration: 0.220 ms
+2023-10-02 01:46:32.160 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:32.160 MST [2475656] postgres@postgres LOG:  duration: 0.216 ms
+2023-10-02 01:46:32.870 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:32.870 MST [2475656] postgres@postgres LOG:  duration: 0.203 ms
+2023-10-02 01:46:33.617 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:33.617 MST [2475656] postgres@postgres LOG:  duration: 0.199 ms
+2023-10-02 01:46:34.382 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:34.382 MST [2475656] postgres@postgres LOG:  duration: 0.189 ms
+2023-10-02 01:46:35.090 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:35.090 MST [2475656] postgres@postgres LOG:  duration: 0.199 ms
+2023-10-02 01:46:35.767 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:35.767 MST [2475656] postgres@postgres LOG:  duration: 0.351 ms
+2023-10-02 01:46:36.485 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:36.485 MST [2475656] postgres@postgres LOG:  duration: 0.222 ms
+2023-10-02 01:46:37.239 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:37.239 MST [2475656] postgres@postgres LOG:  duration: 0.212 ms
+2023-10-02 01:46:37.973 MST [2475656] postgres@postgres LOG:  statement: SELECT * FROM COMPANY;
+2023-10-02 01:46:37.973 MST [2475656] postgres@postgres LOG:  duration: 0.211 ms

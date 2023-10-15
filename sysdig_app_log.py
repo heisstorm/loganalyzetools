@@ -8,8 +8,6 @@ import logging
 import pymysql
 import sys
 import psycopg2
-import os
-import json
 
 app = Flask("sysdig_app_log")
 app.config['MYSQL_HOST'] = 'en4217394l.cidse.dhcp.asu.edu'  # 数据库地址
@@ -18,13 +16,25 @@ app.config['MYSQL_USER'] = 'root'  # 数据库用户名
 app.config['MYSQL_PASSWORD'] = '123456'  # 数据库密码
 app.config['MYSQL_CHARSET'] = 'utf8mb4'  # 数据库编码
 if sys.platform.startswith('linux'):
-    sql_log_path = "/var/lib/mysql/en4217394l.log"
+    mysql_log_path = "/var/lib/mysql/en4217394l.log"
+    postgresql_log_path = "/var/log/pg_log/postgresql-2023-10-14_000000.log"
 else:
-    sql_log_path = "static/var/lib/mysql/en4217394l.log"
+    mysql_log_path = "static/var/lib/mysql/en4217394l.log"
+    postgresql_log_path = "static/var/log/pg_log/postgresql-2023-10-02_010707.log"
 
 @app.route('/', methods=['GET'])
 def button_page():
+    if sys.platform.startswith('linux'):
+        init_backend_config()
     return render_template("button_page.html")
+
+def init_backend_config():
+    #1. update postgresql log position, since it will change every day
+    # stderr /var/log/pg_log/postgresql-2023-10-14_000000.log
+    global postgresql_log_path
+    with open("/var/lib/postgresql/15/main/current_logfiles", "r") as postgresql_log_assign:
+        first_line = postgresql_log_assign.readline()
+    postgresql_log_path = first_line[len("stderr "):]
 
 @app.route('/submit_everything', methods=['POST'])
 def submit_everything():
@@ -57,7 +67,10 @@ def process_mysql_sytax(sytax):
     sql_list = [part.strip() for part in sql.split(';') if part.strip()]
     for sqll in sql_list:
         cursor.execute(sqll)
-    sql_return = cursor.fetchall()
+    if cursor.rowcount > 0:
+        sql_return = cursor.fetchall()
+    else:
+        sql_return = "No results returned by the query."
     mysql.commit()  # 修改数据之前要记得commit不然不会成功
     mysql.close()
     sql_return_str = ""
@@ -66,26 +79,30 @@ def process_mysql_sytax(sytax):
     return sql_return_str
 
 def process_postgresql_sytax(sytax):
+    # postgresql默认指定了数据库"postgres"
     postgresql = psycopg2.connect(host=app.config['MYSQL_HOST'],
                             port=5432,
                             user='postgres',
                             password='1234',
-                            db='postgres')
+                            database='postgres')
+    postgresql.autocommit = True
     cursor = postgresql.cursor()
-    # cursor = mysql.cursor()
     sql = sytax
     sql_list = [part.strip() for part in sql.split(';') if part.strip()]
     for sqll in sql_list:
         cursor.execute(sqll)
-    sql_return = cursor.fetchall()
-    postgresql.commit()  # 修改数据之前要记得commit不然不会成功
+    if cursor.rowcount > 0 and not sql.__contains__(" company "):
+        sql_return = cursor.fetchall()
+    else:
+        sql_return = "No results returned by the query."
+    # postgresql.commit()  # 修改数据之前要记得commit不然不会成功
     postgresql.close()
     sql_return_str = ""
     for sql_return_item in sql_return:
         sql_return_str = "%s%s\n" % (sql_return_str, str(sql_return_item).rstrip("}").lstrip("{"))
     return sql_return_str
 
-def process_mysql_log():
+def process_sql_log(sql_log_path):
     with open(sql_log_path, "r") as sql_log_file:
         all_lines = sql_log_file.readlines()
         last_200_lines = all_lines[-200:]
@@ -101,9 +118,11 @@ def create_db_user():
     if database_select == "mysql":
         sql_sytax = "CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (db_uname, db_pwd)
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "CREATE USER '%s'@'localhost' IDENTIFIED BY '%s';" % (db_uname, db_pwd)
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -123,9 +142,11 @@ def query_db_user():
     if database_select == "mysql":
         sql_sytax = "SELECT User, Host FROM mysql.user;"
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "SELECT usename FROM pg_user;"
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -146,9 +167,11 @@ def delete_db_user():
     if database_select == "mysql":
         sql_sytax = "DROP USER '%s'@'localhost';" % db_uname_delete
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "DROP USER %s;" % db_uname_delete
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -161,16 +184,6 @@ def delete_db_user():
     result_dict["sql_log"] = sql_log
     return result_dict, 200
 
-@app.route('/db_login', methods=['POST'])
-def db_login():
-    database_select = request.form.get("database_select")
-    pass
-
-@app.route('/db_logout', methods=['POST'])
-def db_logout():
-    database_select = request.form.get("database_select")
-    pass
-
 @app.route('/db_changepwd', methods=['POST'])
 def db_changepwd():
     database_select = request.form.get("database_select")
@@ -180,9 +193,11 @@ def db_changepwd():
     if database_select == "mysql":
         sql_sytax = "ALTER USER '%s'@'localhost' IDENTIFIED BY '%s';" % (db_uname_change, db_pwd_change)
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "ALTER USER %s WITH PASSWORD '%s';" % (db_uname_change, db_pwd_change)
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -203,9 +218,11 @@ def query_db_user_password():
     if database_select == "mysql":
         sql_sytax = "SELECT * FROM mysql.user;"
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "SELECT usename, passwd FROM pg_shadow;"
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -227,9 +244,11 @@ def create_database():
     if database_select == "mysql":
         sql_sytax = "CREATE DATABASE %s;" % create_database_name
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "CREATE DATABASE %s;" % create_database_name
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -250,9 +269,11 @@ def query_database():
     if database_select == "mysql":
         sql_sytax = "SHOW DATABASES;"
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "SELECT datname FROM pg_database;"
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -274,9 +295,11 @@ def delete_database():
     if database_select == "mysql":
         sql_sytax = "DROP DATABASE %s;" % delete_database_name
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "DROP DATABASE %s;" % delete_database_name
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -299,9 +322,11 @@ def create_table():
     if database_select == "mysql":
         sql_sytax = create_table_sql
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "CREATE TABLE %s ( employee_id serial PRIMARY KEY, first_name VARCHAR (50), last_name VARCHAR (50), email VARCHAR (100), hire_date DATE );" % create_table_name
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -323,9 +348,11 @@ def query_table():
     if database_select == "mysql":
         sql_sytax = create_table_sql
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';"
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -348,9 +375,11 @@ def delete_table():
     if database_select == "mysql":
         sql_sytax = create_table_sql
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "DROP TABLE %s;" % delete_table_name
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -372,9 +401,11 @@ def insert_data():
     if database_select == "mysql":
         sql_sytax = insert_sql
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "INSERT INTO company (name, age) VALUES ('ppp', '30');"
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -395,9 +426,11 @@ def query_data():
     query_sql = request.form.get("query_sql")
     if database_select == "mysql":
         sql_result = process_mysql_sytax(query_sql)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        query_sql = "select * from company;"
+        sql_result = process_postgresql_sytax(query_sql)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -419,9 +452,11 @@ def delete_data():
     if database_select == "mysql":
         sql_sytax = delete_sql
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "DELETE FROM company WHERE id = (SELECT max(id) FROM company);"
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
@@ -443,9 +478,11 @@ def update_data():
     if database_select == "mysql":
         sql_sytax = update_sql
         sql_result = process_mysql_sytax(sql_sytax)
-        sql_log = process_mysql_log()
+        sql_log = process_sql_log(mysql_log_path)
     elif database_select == "postgresql":
-        pass
+        sql_sytax = "UPDATE company SET age = 21 WHERE id = (SELECT max(id) FROM company);"
+        sql_result = process_postgresql_sytax(sql_sytax)
+        sql_log = process_sql_log(postgresql_log_path)
     elif database_select == "redis":
         pass
     elif database_select == "mongodb":
