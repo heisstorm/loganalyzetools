@@ -1,0 +1,165 @@
+2023-09-02 17:34:15,063 - ERROR - app.py - log_exception - 1414 - Exception on /button_page_function [POST]
+Traceback (most recent call last):
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "D:\Sysdig_Web\sysdig_app_log.py", line 18, in button_page_function
+    logging.CRITICAL("------------------------------this is a message from logging module--------------------")
+TypeError: 'int' object is not callable
+2023-09-02 17:34:16,860 - ERROR - app.py - log_exception - 1414 - Exception on /button_page_function [POST]
+Traceback (most recent call last):
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "D:\Sysdig_Web\sysdig_app_log.py", line 18, in button_page_function
+    logging.CRITICAL("------------------------------this is a message from logging module--------------------")
+TypeError: 'int' object is not callable
+2023-09-02 17:34:17,019 - ERROR - app.py - log_exception - 1414 - Exception on /button_page_function [POST]
+Traceback (most recent call last):
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "D:\Sysdig_Web\sysdig_app_log.py", line 18, in button_page_function
+    logging.CRITICAL("------------------------------this is a message from logging module--------------------")
+TypeError: 'int' object is not callable
+2023-09-02 17:38:45,444 - ERROR - app.py - log_exception - 1414 - Exception on /button_page_function [POST]
+Traceback (most recent call last):
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\Sysdig_Web\venv\lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "D:\Sysdig_Web\sysdig_app_log.py", line 19, in button_page_function
+    with open("python_write_file.txt", 'wr', encoding='utf-8') as f:
+ValueError: must have exactly one of create/read/write/append mode
+2023-09-23 10:50:35,378 - ERROR - app.py - log_exception - 1414 - Exception on /download_file [GET]
+Traceback (most recent call last):
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/sysdig_app_log.py", line 30, in download_file
+    return send_file(file_path, as_attachment=True)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/helpers.py", line 504, in send_file
+    return werkzeug.utils.send_file(  # type: ignore[return-value]
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/werkzeug/utils.py", line 427, in send_file
+    stat = os.stat(path)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/2.txt'
+2023-09-24 00:16:22,953 - ERROR - app.py - log_exception - 1414 - Exception on /download_file [GET]
+Traceback (most recent call last):
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/sysdig_app_log.py", line 29, in download_file
+    return 200, send_file(file_path, as_attachment=True)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/helpers.py", line 504, in send_file
+    return werkzeug.utils.send_file(  # type: ignore[return-value]
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/werkzeug/utils.py", line 427, in send_file
+    stat = os.stat(path)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/static/sydig_log_1M'
+2023-09-24 00:17:07,152 - ERROR - app.py - log_exception - 1414 - Exception on /download_file [GET]
+Traceback (most recent call last):
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/sysdig_app_log.py", line 29, in download_file
+    return send_file(file_path, as_attachment=True)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/helpers.py", line 504, in send_file
+    return werkzeug.utils.send_file(  # type: ignore[return-value]
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/werkzeug/utils.py", line 427, in send_file
+    stat = os.stat(path)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/static/sydig_log_1M'
+2023-09-24 00:17:34,966 - ERROR - app.py - log_exception - 1414 - Exception on /download_file [GET]
+Traceback (most recent call last):
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/sysdig_app_log.py", line 29, in download_file
+    return send_file(file_path, as_attachment=True)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/helpers.py", line 504, in send_file
+    return werkzeug.utils.send_file(  # type: ignore[return-value]
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/werkzeug/utils.py", line 427, in send_file
+    stat = os.stat(path)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/static/sydig_log_1M'
+2023-09-24 00:32:56,241 - ERROR - app.py - log_exception - 1414 - Exception on /download_file [GET]
+Traceback (most recent call last):
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/sysdig_app_log.py", line 29, in download_file
+    return send_file(file_path, as_attachment=True)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/helpers.py", line 504, in send_file
+    return werkzeug.utils.send_file(  # type: ignore[return-value]
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/werkzeug/utils.py", line 427, in send_file
+    stat = os.stat(path)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/static/sydig_log.txt'
+2023-09-24 00:33:41,291 - ERROR - app.py - log_exception - 1414 - Exception on /download_file [GET]
+Traceback (most recent call last):
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/sysdig_app_log.py", line 29, in download_file
+    return send_file(file_path, as_attachment=True)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/helpers.py", line 504, in send_file
+    return werkzeug.utils.send_file(  # type: ignore[return-value]
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/werkzeug/utils.py", line 427, in send_file
+    stat = os.stat(path)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/shijie/Documents/app_log_experiment/Sysdig_Web/Sysdig_Web/static/sydig_log.txt'
+2023-09-24 00:48:56,216 - ERROR - app.py - log_exception - 1414 - Exception on /exe_sql [POST]
+Traceback (most recent call last):
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1487, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1506, in finalize_request
+    response = self.make_response(rv)
+  File "/Users/shijie/Documents/app_log_experiment/venv/lib/python3.9/site-packages/flask/app.py", line 1837, in make_response
+    raise TypeError(
+TypeError: The view function did not return a valid response. The return type must be a string, dict, list, tuple with headers or status, Response instance, or WSGI callable, but it was a int.

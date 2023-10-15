@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>App_Log_Collection</title>
+    <style>
+        .container {
+            display: flex;
+            width: 100%;
+            height: 152vh;
+        }
+
+        .button-container {
+            flex: 1;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .log-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .log-box1 {
+            /*flex: 1;*/
+            height: 500px;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .log-box2 {
+            flex: 1;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .grayed-out {
+            color: #777; /* Gray text color */
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<table>
+    <tr>
+        <td>
+        <h2 style="color:blue ; font-size:20px">Server 1: Uwsgi/Nginx </h2>
+        </td>
+        <td>
+        <h2 style="color:red ; font-size:20px">  Specify Database: </h2>
+        </td>
+        <td>
+        <form action="", method="post">
+            <select name="name" id="database_select">
+                <option value="mysql">Mysql</option>
+                <option value="postgresql">PostgreSQL</option>
+                <option value="redis">Redis</option>
+                <option value="mongodb">MongoDB</option>
+                <option value="influxdb">InfluxDB</option>
+                <option value="neo4j">Neo4j</option>
+            </select>
+        </form>
+        </td>
+        <td>
+        <h2 style="color:green ; font-size:20px">Port: 5001(nginx load balance) <- 5010 to 5019(uwsgi)</h2>
+        </td>
+        <td><input type="button" value="Start Sysdig" onclick='start_sysdig()'></td>
+        <td><input type="button" value="Stop Sysdig + Download App + System Log" onclick='get_log()'></td>
+    </tr>
+</table>
+    <div class="container">
+        <div class="button-container">
+            <table>
+                <tr>
+                    <h5>0. DO EVERYTHING BELOW</h5>
+                </tr>
+                <tr>
+                <td>Frequency:</td>
+                <td><input type="text" name="" id="frequency" class="grayed-out" value="10"></td>
+                <td><input type="button" value="Submit" onclick='submit_everything()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>1. Create Database User</h5>
+                </tr>
+                <tr>
+                <td>UserName:</td>
+                <td><input type="text" name="" id="db_uname" class="grayed-out" value="wangdali"></td>
+                <td>Password:</td>
+                <td><input type="text" name="" id="db_pwd" class="grayed-out" value="asu123!@#"></td>
+                <td><input type="button" value="Create" onclick='create_db_user()'></td>
+                <td><input type="button" value="Query_DB_User" onclick='query_db_user()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>2. Delete Database User</h5>
+                </tr>
+                <tr>
+                <td>UserName:</td>
+                <td><input type="text" name="" id="db_uname_delete" class="grayed-out" value="wangdali"></td>
+                <td><input type="button" value="Delete" onclick='delete_db_user()'></td>
+                <td><input type="button" value="Query_DB_User" onclick='query_db_user()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>3. Database Login Logout</h5>
+                </tr>
+                <tr>
+                <td>UserName:</td>
+                <td><input type="text" name="" id="db_uname_login" class="grayed-out" value="wangdali"></td>
+                <td>Password:</td>
+                <td><input type="text" name="" id="db_pwd_login" class="grayed-out" value="asu123!@#"></td>
+                <td><input type="button" value="Login" onclick='db_login()'></td>
+                <td><input type="button" value="Logout" onclick='db_logout()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>4. Change Database Password</h5>
+                </tr>
+                <tr>
+                <td>UserName:</td>
+                <td><input type="text" name="" id="db_uname_change" class="grayed-out" value="wangdali"></td>
+                <td>Password:</td>
+                <td><input type="text" name="" id="db_pwd_change" class="grayed-out" value="asu321!@#"></td>
+                <td><input type="button" value="Change" onclick='db_changepwd()'></td>
+                <td><input type="button" value="Query_DB_User_Password(MD5)" onclick='query_db_user_password()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>5. Create Database</h5>
+                </tr>
+                <tr>
+                <td>Database Name:</td>
+                <td><input type="text" name="" id="create_database_name" class="grayed-out" value="database1"></td>
+                <td><input type="button" value="Create" onclick='create_database()'></td>
+                <td><input type="button" value="Query_Database" onclick='query_database()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>6. Delete Database</h5>
+                </tr>
+                <tr>
+                <td>Database Name:</td>
+                <td><input type="text" name="" id="delete_database_name" class="grayed-out" value="database1"></td>
+                <td><input type="button" value="Delete" onclick='delete_database()'></td>
+                <td><input type="button" value="Query_Database" onclick='query_database()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>7. Create Table</h5>
+                </tr>
+                <tr>
+                <td>Table Name:</td>
+                <td><input type="text" name="" id="create_table_name" class="grayed-out" value="table1"></td>
+<!--                <td>Table SQL:</td>-->
+<!--                <td><input type="text" name="" id="create_table_sql" placeholder="USE user_info;CREATE TABLE {Table Name} (employee_id INT AUTO"></td>-->
+                <td><input type="button" value="Create" onclick='create_table()'></td>
+                <td><input type="button" value="Query_Table" onclick='query_table()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>8. Delete Table</h5>
+                </tr>
+                 <tr>
+                <td>Table Name:</td>
+                <td><input type="text" name="" id="delete_table_name" class="grayed-out" value="table1"></td>
+                <td><input type="button" value="Delete" onclick='delete_table()'></td>
+                <td><input type="button" value="Query_Table" onclick='query_table()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>9. Insert Data Row</h5>
+                </tr>
+                <tr>
+                <td>Insert SQL:</td>
+                <td><input type="text" name="" id="insert_sql" size="60" class="grayed-out" value="USE user_info;INSERT INTO usersinfo (name, password) VALUES ('John Doe', 'mysecretpassword');"></td>
+                <td><input type="button" value="Insert" onclick='insert_data()'></td>
+                <td><input type="button" value="Query_Data" onclick='query_data()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>10. Delete Data Row</h5>
+                </tr>
+                <tr>
+                <td>Delete SQL:</td>
+                <td><input type="text" name="" id="delete_sql" size="60" class="grayed-out" value="USE user_info;DELETE FROM usersinfo WHERE id IS NULL ORDER BY name DESC LIMIT 1;"></td>
+                <td><input type="button" value="Delete" onclick='delete_data()'></td>
+                <td><input type="button" value="Query_Data" onclick='query_data()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>11. Update Data Row</h5>
+                </tr>
+                <tr>
+                <td>Update SQL:</td>
+                <td><input type="text" name="" id="update_sql" size="60" class="grayed-out" value="USE user_info;UPDATE usersinfo SET password = 'new_password' WHERE name = 'John Doe';"></td>
+                <td><input type="button" value="Update" onclick='update_data()'></td>
+                <td><input type="button" value="Query_Data" onclick='query_data()'></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <h5>12. Query Data Row</h5>
+                </tr>
+                <tr>
+                <td>Query SQL:</td>
+                <td><input type="text" name="" id="query_sql" size="60" class="grayed-out" value="USE user_info;SELECT * FROM usersinfo;"></td>
+                <td><input type="button" value="Query_Data" onclick='query_data()'></td>
+                </tr>
+            </table>
+        </div>
+        <div class="log-container">
+            <div class="log-box1">
+                <textarea id="log1" readonly></textarea>
+            </div>
+            <div class="log-box2">
+                <textarea id="log2" readonly></textarea>
+            </div>
+            <div class="log-box2">
+                <textarea id="log3" readonly></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    </script>
+</body>
+<script type="text/javascript">
+
+
+function submit_everything() {
+    let formData = new FormData()
+    formData.append('frequency', document.getElementById('frequency').value)
+    formData.append('database_select', document.getElementById('database_select').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/submit_everything" ,
+        data: formData,
+        success: function (result) {
+            if (result.resultCode == 200) {
+                alert("SUCCESS");
+            }
+        }
+    });
+}
+
+function create_db_user() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('db_uname', document.getElementById('db_uname').value)
+    formData.append('db_pwd', document.getElementById('db_pwd').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/create_db_user" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function query_db_user() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/query_db_user" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function delete_db_user() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('db_uname_delete', document.getElementById('db_uname_delete').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/delete_db_user" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function db_login() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('db_uname_login', document.getElementById('db_uname_login').value)
+    formData.append('db_pwd_login', document.getElementById('db_pwd_login').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/db_login" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function db_logout() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('db_uname_login', document.getElementById('db_uname_login').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/db_logout" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function db_changepwd() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('db_uname_change', document.getElementById('db_uname_change').value)
+    formData.append('db_pwd_change', document.getElementById('db_pwd_change').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/db_changepwd" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function query_db_user_password() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/query_db_user_password" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function create_database() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('create_database_name', document.getElementById('create_database_name').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/create_database" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function query_database() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/query_database" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+function delete_database() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('delete_database_name', document.getElementById('delete_database_name').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/delete_database" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function create_table() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('create_table_name', document.getElementById('create_table_name').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/create_table" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+function query_table() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/query_table" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function delete_table() {
+    // 获取数据
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('delete_table_name', document.getElementById('delete_table_name').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/delete_table" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function insert_data() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('insert_sql', document.getElementById('insert_sql').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/insert_data" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function query_data() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('query_sql', document.getElementById('query_sql').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/query_data",
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function delete_data() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('delete_sql', document.getElementById('delete_sql').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/delete_data" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+function update_data() {
+    let formData = new FormData()
+    formData.append('database_select', document.getElementById('database_select').value)
+    formData.append('update_sql', document.getElementById('update_sql').value)
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        url: "/update_data" ,
+        data: formData,
+        success: function(data) {
+            var textbox1 = document.getElementById('log1');
+            var textbox2 = document.getElementById('log2');
+            textbox2.value = data.sql_result;
+            textbox1.value = data.sql_log;
+            textbox1.selectionStart = textbox1.value.length;
+            textbox1.selectionEnd = textbox1.value.length;
+            textbox1.focus();
+        },
+        error: function(xhr, status, error) {
+        console.error(status + " - " + error);
+        }
+    });
+}
+
+
+
+</script>
+</html>

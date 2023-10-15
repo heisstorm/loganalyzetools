@@ -1,0 +1,243 @@
+2023-10-02T01:23:07.857665Z	  179 Query	set  global log_output='FILE'
+2023-10-02T01:23:12.973038Z	  179 Query	truncate table mysql.general_log
+2023-10-02T01:23:18.664112Z	  179 Query	show variables like 'gen%'
+2023-10-02T01:23:32.268842Z	  179 Query	show variables like 'general_log_file'
+2023-10-02T01:28:31.576653Z	  179 Query	show variables like '%quer%'
+2023-10-02T01:33:52.467080Z	  180 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T01:33:52.477876Z	  180 Query	SET NAMES utf8mb4
+2023-10-02T01:33:52.484069Z	  180 Query	SET AUTOCOMMIT = 0
+2023-10-02T01:33:52.491613Z	  180 Query	SELECT name, password FROM usersinfo
+2023-10-02T01:33:52.506684Z	  180 Quit	
+2023-10-02T01:33:55.721934Z	  181 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T01:33:55.724460Z	  181 Query	SET NAMES utf8mb4
+2023-10-02T01:33:55.725882Z	  181 Query	SET AUTOCOMMIT = 0
+2023-10-02T01:33:55.726253Z	  181 Query	SELECT name, password FROM usersinfo
+2023-10-02T01:33:55.727650Z	  181 Quit	
+2023-10-02T01:33:59.304578Z	  182 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T01:33:59.306773Z	  182 Query	SET NAMES utf8mb4
+2023-10-02T01:33:59.307683Z	  182 Query	SET AUTOCOMMIT = 0
+2023-10-02T01:33:59.307939Z	  182 Query	SELECT name, password FROM usersinfo
+2023-10-02T01:33:59.310226Z	  182 Query	INSERT INTO usersinfo (name, password) VALUES ('wewq', '23132')
+2023-10-02T01:33:59.315925Z	  182 Query	COMMIT
+2023-10-02T01:33:59.327378Z	  182 Quit	
+2023-10-02T01:34:01.002535Z	  183 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T01:34:01.007206Z	  183 Query	SET NAMES utf8mb4
+2023-10-02T01:34:01.007937Z	  183 Query	SET AUTOCOMMIT = 0
+2023-10-02T01:34:01.008414Z	  183 Query	SELECT name, password FROM usersinfo
+2023-10-02T01:34:01.017648Z	  183 Quit	
+2023-10-02T01:34:03.258034Z	  184 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T01:34:03.260211Z	  184 Query	SET NAMES utf8mb4
+2023-10-02T01:34:03.262567Z	  184 Query	SET AUTOCOMMIT = 0
+2023-10-02T01:34:03.262796Z	  184 Query	SELECT name, password FROM usersinfo
+2023-10-02T01:34:03.265173Z	  184 Query	UPDATE usersinfo SET password = '23132' WHERE name = 'wewq'
+2023-10-02T01:34:03.268362Z	  184 Query	COMMIT
+2023-10-02T01:34:03.268412Z	  184 Quit	
+2023-10-02T01:34:06.822325Z	  185 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T01:34:06.824052Z	  185 Query	SET NAMES utf8mb4
+2023-10-02T01:34:06.824816Z	  185 Query	SET AUTOCOMMIT = 0
+2023-10-02T01:34:06.825168Z	  185 Query	SELECT name, password FROM usersinfo
+2023-10-02T01:34:06.826833Z	  185 Query	UPDATE usersinfo SET password = '321312' WHERE name = 'wewq'
+2023-10-02T01:34:06.830891Z	  185 Query	COMMIT
+2023-10-02T01:34:06.839228Z	  185 Quit	
+2023-10-02T01:46:50.229759Z	  179 Query	CREATE USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T01:47:07.133077Z	  179 Query	CREATE USER 'shijielu2'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T01:47:15.763735Z	  179 Query	CREATE USER 'shijielu3'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T01:47:23.794474Z	  179 Query	CREATE USER 'shijielu4'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T01:47:32.897103Z	  179 Query	CREATE USER 'shijielu5'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T01:47:41.015703Z	  179 Query	CREATE USER 'shijielu6'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T01:54:02.878284Z	  179 Query	DELETE FROM mysql.user WHERE User='shijielu1'
+2023-10-02T01:54:06.037281Z	  179 Query	DELETE FROM mysql.user WHERE User='shijielu2'
+2023-10-02T01:54:08.005676Z	  179 Query	DELETE FROM mysql.user WHERE User='shijielu3'
+2023-10-02T01:54:09.807143Z	  179 Query	DELETE FROM mysql.user WHERE User='shijielu4'
+2023-10-02T01:54:11.992291Z	  179 Query	DELETE FROM mysql.user WHERE User='shijielu5'
+2023-10-02T01:54:13.632036Z	  179 Query	DELETE FROM mysql.user WHERE User='shijielu6'
+2023-10-02T01:54:15.685304Z	  179 Query	DELETE FROM mysql.user WHERE User='shijielu7'
+2023-10-02T01:54:48.796542Z	  179 Query	select user,host from mysql.user
+2023-10-02T02:09:21.748229Z	  179 Quit	
+2023-10-02T02:09:27.623100Z	  186 Connect	root@localhost on  using Socket
+2023-10-02T02:09:27.631557Z	  186 Query	select @@version_comment limit 1
+2023-10-02T02:09:30.260775Z	  186 Quit	
+2023-10-02T02:09:34.306075Z	  187 Connect	root@localhost on  using Socket
+2023-10-02T02:09:34.307855Z	  187 Query	select @@version_comment limit 1
+2023-10-02T02:09:36.793711Z	  187 Quit	
+2023-10-02T02:09:45.011167Z	  188 Connect	root@localhost on  using Socket
+2023-10-02T02:09:45.013084Z	  188 Query	select @@version_comment limit 1
+2023-10-02T02:09:47.230319Z	  188 Quit	
+2023-10-02T02:09:51.825131Z	  189 Connect	root@localhost on  using Socket
+2023-10-02T02:09:51.826784Z	  189 Query	select @@version_comment limit 1
+2023-10-02T02:09:53.654031Z	  189 Quit	
+2023-10-02T02:09:58.311176Z	  190 Connect	root@localhost on  using Socket
+2023-10-02T02:09:58.312960Z	  190 Query	select @@version_comment limit 1
+2023-10-02T02:13:14.696852Z	  190 Query	CREATE USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:13:23.397500Z	  190 Quit	
+2023-10-02T02:13:28.632874Z	  191 Connect	root@localhost on  using Socket
+2023-10-02T02:13:28.635708Z	  191 Query	select @@version_comment limit 1
+2023-10-02T02:13:42.013438Z	  191 Query	CREATE USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:13:54.102153Z	  191 Query	select user,host from mysql.user
+2023-10-02T02:20:32.997725Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:20:50.675606Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:21:01.203869Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:21:03.806241Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:21:06.352511Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:21:08.742823Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:21:11.459273Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:21:13.898905Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:21:19.270612Z	  191 Query	ALTER USER 'shijielu1'@'localhost' IDENTIFIED BY <secret>
+2023-10-02T02:24:24.732021Z	  191 Query	CREATE DATABASE database1
+2023-10-02T02:24:28.581024Z	  191 Query	CREATE DATABASE database2
+2023-10-02T02:24:30.752966Z	  191 Query	CREATE DATABASE database3
+2023-10-02T02:24:32.996203Z	  191 Query	CREATE DATABASE database4
+2023-10-02T02:24:34.932326Z	  191 Query	CREATE DATABASE database5
+2023-10-02T02:24:36.620799Z	  191 Query	CREATE DATABASE database6
+2023-10-02T02:26:51.827589Z	  191 Query	show DATABASES
+2023-10-02T02:27:14.435198Z	  191 Query	DROP DATABASE IF EXISTS database1
+2023-10-02T02:27:14.472965Z	  191 Query	SELECT DATABASE()
+2023-10-02T02:27:17.469392Z	  191 Query	DROP DATABASE IF EXISTS database2
+2023-10-02T02:27:17.483017Z	  191 Query	SELECT DATABASE()
+2023-10-02T02:27:19.169871Z	  191 Query	DROP DATABASE IF EXISTS database3
+2023-10-02T02:27:19.186546Z	  191 Query	SELECT DATABASE()
+2023-10-02T02:27:20.730535Z	  191 Query	DROP DATABASE IF EXISTS database4
+2023-10-02T02:27:20.747624Z	  191 Query	SELECT DATABASE()
+2023-10-02T02:27:22.326286Z	  191 Query	DROP DATABASE IF EXISTS database5
+2023-10-02T02:27:22.342155Z	  191 Query	SELECT DATABASE()
+2023-10-02T02:27:24.790594Z	  191 Query	DROP DATABASE IF EXISTS database6
+2023-10-02T02:27:24.805603Z	  191 Query	SELECT DATABASE()
+2023-10-02T02:27:27.535557Z	  191 Query	show DATABASES
+2023-10-02T02:31:22.076428Z	  191 Query	select user_info
+2023-10-02T02:31:26.614160Z	  191 Query	SELECT DATABASE()
+2023-10-02T02:31:26.618521Z	  191 Init DB	user_info
+2023-10-02T02:31:26.622259Z	  191 Query	show databases
+2023-10-02T02:31:26.634617Z	  191 Query	show tables
+2023-10-02T02:31:26.653006Z	  191 Field List	usersinfo
+2023-10-02T02:33:54.577321Z	  191 Query	show TABLES
+2023-10-02T02:34:39.362210Z	  191 Query	CREATE TABLE `name_info` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL, `year` int(12) DEFAULT '18', PRIMARY KEY (`id`), KEY `cs` (`name`,`year`) )
+2023-10-02T02:34:48.601800Z	  191 Query	CREATE TABLE `name_info1` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL, `year` int(12) DEFAULT '18', PRIMARY KEY (`id`), KEY `cs` (`name`,`year`) )
+2023-10-02T02:34:56.524317Z	  191 Query	CREATE TABLE `name_info2` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL, `year` int(12) DEFAULT '18', PRIMARY KEY (`id`), KEY `cs` (`name`,`year`) )
+2023-10-02T02:35:03.622729Z	  191 Query	CREATE TABLE `name_info3` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL, `year` int(12) DEFAULT '18', PRIMARY KEY (`id`), KEY `cs` (`name`,`year`) )
+2023-10-02T02:35:10.462670Z	  191 Query	CREATE TABLE `name_info4` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL, `year` int(12) DEFAULT '18', PRIMARY KEY (`id`), KEY `cs` (`name`,`year`) )
+2023-10-02T02:35:16.892082Z	  191 Query	CREATE TABLE `name_info5` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL, `year` int(12) DEFAULT '18', PRIMARY KEY (`id`), KEY `cs` (`name`,`year`) )
+2023-10-02T02:35:21.675668Z	  191 Query	show TABLES
+2023-10-02T02:36:18.571392Z	  191 Query	DROP TABLE name_info
+2023-10-02T02:36:26.230397Z	  191 Query	DROP TABLE name_info1
+2023-10-02T02:36:31.805128Z	  191 Query	DROP TABLE name_info2
+2023-10-02T02:36:37.262234Z	  191 Query	DROP TABLE name_info3
+2023-10-02T02:36:39.450251Z	  191 Query	DROP TABLE name_info4
+2023-10-02T02:36:41.330479Z	  191 Query	DROP TABLE name_info5
+2023-10-02T02:36:47.763666Z	  191 Query	show TABLES
+2023-10-02T02:37:54.350589Z	  192 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:37:54.356053Z	  192 Query	SET NAMES utf8mb4
+2023-10-02T02:37:54.357884Z	  192 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:37:54.365718Z	  192 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:37:54.369919Z	  192 Query	INSERT INTO usersinfo (name, password) VALUES ('ewqeweqwewq', 'ewqeqweqweqweq')
+2023-10-02T02:37:54.372152Z	  192 Query	COMMIT
+2023-10-02T02:37:54.383432Z	  192 Quit	
+2023-10-02T02:38:00.638921Z	  193 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:38:00.640309Z	  193 Query	SET NAMES utf8mb4
+2023-10-02T02:38:00.641344Z	  193 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:38:00.641674Z	  193 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:38:00.643609Z	  193 Query	INSERT INTO usersinfo (name, password) VALUES ('eweqweqw221', 'wqeqwe21')
+2023-10-02T02:38:00.644277Z	  193 Query	COMMIT
+2023-10-02T02:38:00.652049Z	  193 Quit	
+2023-10-02T02:38:05.196781Z	  194 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:38:05.198995Z	  194 Query	SET NAMES utf8mb4
+2023-10-02T02:38:05.200052Z	  194 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:38:05.200491Z	  194 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:38:05.202216Z	  194 Query	INSERT INTO usersinfo (name, password) VALUES ('ewe21eda', 'ewqe232')
+2023-10-02T02:38:05.203245Z	  194 Query	COMMIT
+2023-10-02T02:38:05.210787Z	  194 Quit	
+2023-10-02T02:38:09.096868Z	  195 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:38:09.098151Z	  195 Query	SET NAMES utf8mb4
+2023-10-02T02:38:09.098973Z	  195 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:38:09.099265Z	  195 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:38:09.100759Z	  195 Query	INSERT INTO usersinfo (name, password) VALUES ('ewqe23eewq', 'ewqe2321')
+2023-10-02T02:38:09.101872Z	  195 Query	COMMIT
+2023-10-02T02:38:09.109689Z	  195 Quit	
+2023-10-02T02:38:13.689211Z	  196 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:38:13.691146Z	  196 Query	SET NAMES utf8mb4
+2023-10-02T02:38:13.692055Z	  196 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:38:13.692433Z	  196 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:38:13.693567Z	  196 Query	INSERT INTO usersinfo (name, password) VALUES ('ewqe2e3', 'eq3313')
+2023-10-02T02:38:13.694313Z	  196 Query	COMMIT
+2023-10-02T02:38:13.702680Z	  196 Quit	
+2023-10-02T02:41:07.764970Z	  191 Query	select * from user_info
+2023-10-02T02:41:17.123905Z	  191 Query	select * from usersinfo
+2023-10-02T02:44:42.057415Z	  191 Query	DELETE FROM usersinfo WHERE name=33123
+2023-10-02T02:45:40.145673Z	  191 Query	DELETE FROM usersinfo WHERE name='33123'
+2023-10-02T02:45:43.148920Z	  191 Query	select * from usersinfo
+2023-10-02T02:46:07.197679Z	  191 Query	DELETE FROM usersinfo WHERE name='dwadaw'
+2023-10-02T02:46:12.707356Z	  191 Query	DELETE FROM usersinfo WHERE name='wq3213213'
+2023-10-02T02:46:18.671251Z	  191 Query	DELETE FROM usersinfo WHERE name='wq3213213'
+2023-10-02T02:46:23.864330Z	  191 Query	DELETE FROM usersinfo WHERE name='32131321'
+2023-10-02T02:46:28.161869Z	  191 Query	DELETE FROM usersinfo WHERE name='dsada'
+2023-10-02T02:46:33.081309Z	  191 Query	DELETE FROM usersinfo WHERE name='dsadwewqeq'
+2023-10-02T02:46:37.915594Z	  191 Query	DELETE FROM usersinfo WHERE name='ewqe23eewq'
+2023-10-02T02:47:46.201960Z	  197 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:47:46.208434Z	  197 Query	SET NAMES utf8mb4
+2023-10-02T02:47:46.209624Z	  197 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:47:46.210338Z	  197 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:47:46.211573Z	  197 Query	UPDATE usersinfo SET password = 'eq3313' WHERE name = 'Cristina'
+2023-10-02T02:47:46.214138Z	  197 Query	COMMIT
+2023-10-02T02:47:46.223956Z	  197 Quit	
+2023-10-02T02:47:49.669600Z	  198 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:47:49.671042Z	  198 Query	SET NAMES utf8mb4
+2023-10-02T02:47:49.671920Z	  198 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:47:49.672277Z	  198 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:47:49.673725Z	  198 Query	UPDATE usersinfo SET password = 'weqeqq' WHERE name = 'Cristina'
+2023-10-02T02:47:49.674219Z	  198 Query	COMMIT
+2023-10-02T02:47:49.708881Z	  198 Quit	
+2023-10-02T02:47:52.166890Z	  199 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:47:52.168149Z	  199 Query	SET NAMES utf8mb4
+2023-10-02T02:47:52.168888Z	  199 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:47:52.169094Z	  199 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:47:52.170039Z	  199 Query	UPDATE usersinfo SET password = 'ewqewqe' WHERE name = 'Cristina'
+2023-10-02T02:47:52.170941Z	  199 Query	COMMIT
+2023-10-02T02:47:52.178973Z	  199 Quit	
+2023-10-02T02:47:54.707001Z	  200 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:47:54.707940Z	  200 Query	SET NAMES utf8mb4
+2023-10-02T02:47:54.708489Z	  200 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:47:54.708816Z	  200 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:47:54.710174Z	  200 Query	UPDATE usersinfo SET password = '3e32e32' WHERE name = 'Cristina'
+2023-10-02T02:47:54.711255Z	  200 Query	COMMIT
+2023-10-02T02:47:54.725113Z	  200 Quit	
+2023-10-02T02:47:56.382414Z	  201 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:47:56.383415Z	  201 Query	SET NAMES utf8mb4
+2023-10-02T02:47:56.384066Z	  201 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:47:56.384412Z	  201 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:47:56.385543Z	  201 Query	UPDATE usersinfo SET password = '3e32e322312' WHERE name = 'Cristina'
+2023-10-02T02:47:56.386261Z	  201 Query	COMMIT
+2023-10-02T02:47:56.394595Z	  201 Quit	
+2023-10-02T02:47:57.964722Z	  202 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:47:57.965669Z	  202 Query	SET NAMES utf8mb4
+2023-10-02T02:47:57.966561Z	  202 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:47:57.966843Z	  202 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:47:57.968002Z	  202 Query	UPDATE usersinfo SET password = '3e32e322312321' WHERE name = 'Cristina'
+2023-10-02T02:47:57.969122Z	  202 Query	COMMIT
+2023-10-02T02:47:57.978629Z	  202 Quit	
+2023-10-02T02:47:59.590275Z	  203 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:47:59.591641Z	  203 Query	SET NAMES utf8mb4
+2023-10-02T02:47:59.592255Z	  203 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:47:59.592464Z	  203 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:47:59.593272Z	  203 Query	UPDATE usersinfo SET password = 'ewqeqwe' WHERE name = 'Cristina'
+2023-10-02T02:47:59.594027Z	  203 Query	COMMIT
+2023-10-02T02:47:59.602439Z	  203 Quit	
+2023-10-02T02:48:01.264866Z	  204 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:48:01.265688Z	  204 Query	SET NAMES utf8mb4
+2023-10-02T02:48:01.266438Z	  204 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:48:01.266639Z	  204 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:48:01.267315Z	  204 Query	UPDATE usersinfo SET password = '321eqw' WHERE name = 'Cristina'
+2023-10-02T02:48:01.267528Z	  204 Query	COMMIT
+2023-10-02T02:48:01.275716Z	  204 Quit	
+2023-10-02T02:48:03.381513Z	  205 Connect	root@en4217394l.cidse.dhcp.asu.edu on user_info using TCP/IP
+2023-10-02T02:48:03.382295Z	  205 Query	SET NAMES utf8mb4
+2023-10-02T02:48:03.382893Z	  205 Query	SET AUTOCOMMIT = 0
+2023-10-02T02:48:03.383161Z	  205 Query	SELECT name, password FROM usersinfo
+2023-10-02T02:48:03.384047Z	  205 Query	UPDATE usersinfo SET password = '321eqw' WHERE name = 'Cristina'
+2023-10-02T02:48:03.384223Z	  205 Query	COMMIT
+2023-10-02T02:48:03.384610Z	  205 Quit	
+2023-10-02T02:48:46.804412Z	  191 Query	select * from usersinfo
+2023-10-02T02:48:47.972396Z	  191 Query	select * from usersinfo
+2023-10-02T02:48:48.699043Z	  191 Query	select * from usersinfo
+2023-10-02T02:48:49.489050Z	  191 Query	select * from usersinfo
+2023-10-02T02:48:50.219585Z	  191 Query	select * from usersinfo
+2023-10-02T02:48:51.230813Z	  191 Query	select * from usersinfo
+2023-10-02T02:48:51.810704Z	  191 Query	select * from usersinfo
