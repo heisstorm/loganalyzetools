@@ -23,10 +23,16 @@ if sys.platform.startswith('linux'):
     mysql_log_path = "/var/lib/mysql/en4217394l.log"
     postgresql_log_path = "/var/log/pg_log/postgresql-2023-10-14_000000.log"
     redis_log_path = "/var/log/redis/redis-server.log"
+    mongodb_log_path = "/var/lib/mysql/en4217394l.log"
+    influxdb_log_path = "/var/lib/mysql/en4217394l.log"
+    neo4j_log_path = "/var/lib/mysql/en4217394l.log"
 else:
     mysql_log_path = "static/var/lib/mysql/en4217394l.log"
     postgresql_log_path = "static/var/log/pg_log/postgresql-2023-10-02_010707.log"
     redis_log_path = "static/var/log/pg_log/postgresql-2023-10-02_010707.log"
+    mongodb_log_path = "static/var/lib/mysql/en4217394l.log"
+    influxdb_log_path = "static/var/lib/mysql/en4217394l.log"
+    neo4j_log_path = "static/var/lib/mysql/en4217394l.log"
 
 @app.route('/', methods=['GET'])
 def button_page():
@@ -561,63 +567,51 @@ def start_sysdig():
 def stop_sysdig():
     try:
         pid = request.get_json().get('pid')
-        process_to_stop = psutil.Process(pid)
-        # sysdig initiates two sequential pid
-        process_to_stop_1 = psutil.Process(pid+1)
-        process_to_stop.terminate()
-        process_to_stop_1.terminate()
+        # process_to_stop = psutil.Process(pid)
+        # # sysdig initiates two sequential pid
+        # process_to_stop_1 = psutil.Process(pid+1)
+        # process_to_stop.terminate()
+        # process_to_stop_1.terminate()
+        subprocess.run("kill -9 %s %s" % (pid, pid+1), shell=True)
         response = {'message': f'Successfully stopped process with PID {pid}'}
         return jsonify(response), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 200
 
-@app.route('/registerform_str', methods=['POST'])
-def registerform_str():
-    user_ip = request.remote_addr
-    app.config['MYSQL_DB'] = 'user_info'  # 数据库名称
-    mysql = pymysql.connect(host=app.config['MYSQL_HOST'],
-                            port=app.config['MYSQL_PORT'],
-                            user=app.config['MYSQL_USER'],
-                            password=app.config['MYSQL_PASSWORD'],
-                            db=app.config['MYSQL_DB'],
-                            charset=app.config['MYSQL_CHARSET'])
-    username = request.form.get("uname")
-    password = request.form.get("pwd")
-    cursor = mysql.cursor(cursor=pymysql.cursors.DictCursor)
-    sql = "SELECT name, password FROM usersinfo;"
-    cursor.execute(sql)
-    name_password = cursor.fetchall()
-    for name_password_dict in name_password:
-        if username == name_password_dict["name"]:
-            sql = "UPDATE usersinfo SET password = '%s' WHERE name = '%s';" % (password, username)
-            cursor.execute(sql)
-            mysql.commit()
-            mysql.close()
-            logging.debug("user %s update success, ip = %s" % (username, user_ip))
-            return "update passowrd success", 200
-    sql = "INSERT INTO usersinfo (name, password) VALUES ('%s', '%s');" % (username, password)
-    cursor.execute(sql)
-    mysql.commit()
-    mysql.close()
-    logging.debug("user %s register success, ip = %s" % (username, user_ip))
-    return "register success", 200
-
-@app.route('/download_file', methods=['GET'])
+@app.route('/download_logs', methods=['GET'])
 def download_file():
+    # no need to consider multiple users write to one file
     user_ip = request.remote_addr
-    filename = request.args.get("filename")
-    file_path = path.join("static", filename)
-    logging.debug("user ip = %s fetched file" % user_ip)
-    return send_file(file_path, as_attachment=True), 200
+    database_select = request.args.get("database_select")
+    zipped_file_path = path.join("static", database_select)
+    zipped_file_path = "%s.zip" % zipped_file_path
+    if os.path.exists(zipped_file_path):
+        os.remove(zipped_file_path)
+    sysdig_output = "static/system_log.txt"
+    system_log_checkbox_checked = request.args.get("system_log_checkbox_checked")
+    database_log_path = ""
+    if database_select == "mysql":
+        database_log_path = mysql_log_path
+    elif database_select == "postgresql":
+        database_log_path = postgresql_log_path
+    elif database_select == "redis":
+        database_log_path = redis_log_path
+    elif database_select == "mongodb":
+        database_log_path = mongodb_log_path
+    elif database_select == "influxdb":
+        database_log_path = influxdb_log_path
+    elif database_select == "neo4j":
+        database_log_path = neo4j_log_path
+    # 写死的暂时
+    webserver_log_path = "/var/log/nginx/access.log.1"
+    # zip command will zip 2 or 3 log into mysql.zip, filename = mysql
+    if system_log_checkbox_checked == 'true':
+        subprocess.run("zip -j -9r %s %s %s %s" % (zipped_file_path, sysdig_output, database_log_path, webserver_log_path), shell=True)
+    else:
+        subprocess.run("zip -j -9r %s %s %s" % (zipped_file_path, database_log_path, webserver_log_path), shell=True)
+    logging.debug("user ip = %s fetched file %s" % (user_ip, zipped_file_path))
 
-@app.route('/exe_sql', methods=['POST'])
-def exe_sql():
-    sql_syntax = request.form.get("sql_syntax")
-    print(sql_syntax)
-    result_dict = {
-        "key": sql_syntax
-    }
-    return result_dict, 200
+    return send_file(zipped_file_path, as_attachment=True), 200
 
 if __name__ == '__main__':
     handler = logging.FileHandler('flask.log', encoding='UTF-8')

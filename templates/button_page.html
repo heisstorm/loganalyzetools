@@ -85,19 +85,27 @@
         <h2 style="color:green ; font-size:20px">Port: 5001(nginx load balance) <- 5010 to 5019(uwsgi)</h2>
         </td>
         <td><input type="button" id="control-button" class="start-button" value="Start Sysdig" onclick="toggleAction()"></td>
-        <td><input type="button" value="Download Correspond Logs" onclick='get_log()'></td>
+        <td><input type="button" id="download_button" value="Download Correspond Logs" onclick='get_log()'></td>
+        <td><input type="checkbox" id="system_log_checkbox"></td>
+        <td><label for="system_log_checkbox" id="system_log_checkbox_label">Check if include Systemlog</label></td>
+        <td><h5 id="status-text"></h5></td>
     </tr>
 </table>
     <div class="container">
         <div class="button-container">
             <table id="table_0">
                 <tr>
-                    <h5 id="h5_0">0. DO EVERYTHING BELOW</h5>
+                    <h5 id="h5_0">0. Bash Command</h5>
                 </tr>
                 <tr>
-                <td>Frequency:</td>
-                <td><input type="text" name="" id="frequency" class="grayed-out" value="10"></td>
-                <td><input type="button" value="Submit" onclick='submit_everything()'></td>
+                <td>Execute Sequence</td>
+                <td><input type="text" name="" id="bash_sequence" class="grayed-out" value="1,2,3,4,5,6,7,8,9,10,11"></td>
+                <td>Each</td>
+                <td><input type="text" name="" id="bash_frequency" class="grayed-out" value="10"></td>
+                <td>Times</td>
+                <td><input type="button" value="Submit" onclick='bash_command()'></td>
+                <td><input type="checkbox" id="bash_command_checkbox"></td>
+                <td><label for="bash_command_checkbox" id="bash_command_checkbox_label">Check if auto download logs</label></td>
                 </tr>
             </table>
             <table id="table_1">
@@ -109,7 +117,7 @@
                 <td><input type="text" name="" id="db_uname" class="grayed-out" value="wangdali"></td>
                 <td>Password:</td>
                 <td><input type="text" name="" id="db_pwd" class="grayed-out" value="asu123!@#"></td>
-                <td><input type="button" value="Create" onclick='create_db_user()'></td>
+                <td><input type="button" value="Create" id="create_db_user" onclick='create_db_user()'></td>
                 <td><input type="button" value="Query_DB_User" onclick='query_db_user()'></td>
                 </tr>
             </table>
@@ -120,7 +128,7 @@
                 <tr>
                 <td>UserName:</td>
                 <td><input type="text" name="" id="db_uname_delete" class="grayed-out" value="wangdali"></td>
-                <td><input type="button" value="Delete" onclick='delete_db_user()'></td>
+                <td><input type="button" value="Delete" id="delete_db_user" onclick='delete_db_user()'></td>
                 <td><input type="button" value="Query_DB_User" onclick='query_db_user()'></td>
                 </tr>
             </table>
@@ -133,7 +141,7 @@
                 <td><input type="text" name="" id="db_uname_change" class="grayed-out" value="wangdali"></td>
                 <td>Password:</td>
                 <td><input type="text" name="" id="db_pwd_change" class="grayed-out" value="asu321!@#"></td>
-                <td><input type="button" value="Change" onclick='db_changepwd()'></td>
+                <td><input type="button" value="Change" id="db_changepwd" onclick='db_changepwd()'></td>
                 <td><input type="button" value="Query_DB_User_Password(MD5)" onclick='query_db_user_password()'></td>
                 </tr>
             </table>
@@ -144,7 +152,7 @@
                 <tr>
                 <td>Database Name:</td>
                 <td><input type="text" name="" id="create_database_name" class="grayed-out" value="database1"></td>
-                <td><input type="button" value="Create" onclick='create_database()'></td>
+                <td><input type="button" value="Create" id="create_database" onclick='create_database()'></td>
                 <td><input type="button" value="Query_Database" onclick='query_database()'></td>
                 </tr>
             </table>
@@ -155,7 +163,7 @@
                 <tr>
                 <td>Database Name:</td>
                 <td><input type="text" name="" id="delete_database_name" class="grayed-out" value="database1"></td>
-                <td><input type="button" value="Delete" onclick='delete_database()'></td>
+                <td><input type="button" value="Delete" id="delete_database" onclick='delete_database()'></td>
                 <td><input type="button" value="Query_Database" onclick='query_database()'></td>
                 </tr>
             </table>
@@ -168,7 +176,7 @@
                 <td><input type="text" name="" id="create_table_name" class="grayed-out" value="table1"></td>
 <!--                <td>Table SQL:</td>-->
 <!--                <td><input type="text" name="" id="create_table_sql" placeholder="USE user_info;CREATE TABLE {Table Name} (employee_id INT AUTO"></td>-->
-                <td><input type="button" value="Create" onclick='create_table()'></td>
+                <td><input type="button" value="Create" id="create_table" onclick='create_table()'></td>
                 <td><input type="button" value="Query_Table" onclick='query_table()'></td>
                 </tr>
             </table>
@@ -179,7 +187,7 @@
                  <tr>
                 <td>Table Name:</td>
                 <td><input type="text" name="" id="delete_table_name" class="grayed-out" value="table1"></td>
-                <td><input type="button" value="Delete" onclick='delete_table()'></td>
+                <td><input type="button" value="Delete" id="delete_table" onclick='delete_table()'></td>
                 <td><input type="button" value="Query_Table" onclick='query_table()'></td>
                 </tr>
             </table>
@@ -190,7 +198,7 @@
                 <tr>
                 <td>Insert SQL:</td>
                 <td><input type="text" name="" id="insert_sql" size="60" class="grayed-out" value="USE user_info;INSERT INTO usersinfo (name, password) VALUES ('John Doe', 'mysecretpassword');"></td>
-                <td><input type="button" value="Insert" onclick='insert_data()'></td>
+                <td><input type="button" value="Insert" id="insert_data" onclick='insert_data()'></td>
                 <td><input type="button" value="Query_Data" onclick='query_data()'></td>
                 </tr>
             </table>
@@ -201,7 +209,7 @@
                 <tr>
                 <td>Delete SQL:</td>
                 <td><input type="text" name="" id="delete_sql" size="60" class="grayed-out" value="USE user_info;DELETE FROM usersinfo WHERE id IS NULL ORDER BY name DESC LIMIT 1;"></td>
-                <td><input type="button" value="Delete" onclick='delete_data()'></td>
+                <td><input type="button" value="Delete" id="delete_data" onclick='delete_data()'></td>
                 <td><input type="button" value="Query_Data" onclick='query_data()'></td>
                 </tr>
             </table>
@@ -212,7 +220,7 @@
                 <tr>
                 <td>Update SQL:</td>
                 <td><input type="text" name="" id="update_sql" size="60" class="grayed-out" value="USE user_info;UPDATE usersinfo SET password = 'new_password' WHERE name = 'John Doe';"></td>
-                <td><input type="button" value="Update" onclick='update_data()'></td>
+                <td><input type="button" value="Update" id="update_data" onclick='update_data()'></td>
                 <td><input type="button" value="Query_Data" onclick='query_data()'></td>
                 </tr>
             </table>
@@ -223,7 +231,7 @@
                 <tr>
                 <td>Query SQL:</td>
                 <td><input type="text" name="" id="query_sql" size="60" class="grayed-out" value="USE user_info;SELECT * FROM usersinfo;"></td>
-                <td><input type="button" value="Query_Data" onclick='query_data()'></td>
+                <td><input type="button" value="Query_Data" id="query_data" onclick='query_data()'></td>
                 </tr>
             </table>
         </div>
@@ -247,23 +255,102 @@
 <script type="text/javascript">
 
 
-function submit_everything() {
-    let formData = new FormData()
-    formData.append('frequency', document.getElementById('frequency').value)
-    formData.append('database_select', document.getElementById('database_select').value)
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        contentType: false,
-        processData: false,
-        url: "/submit_everything" ,
-        data: formData,
-        success: function (result) {
-            if (result.resultCode == 200) {
-                alert("SUCCESS");
+function bash_command() {
+    let bash_sequence_list = document.getElementById('bash_sequence').value.split(',')
+    let bash_frequency = document.getElementById('bash_frequency').value
+    let bash_command_checkbox_checked = document.getElementById('bash_command_checkbox').checked;
+    for (let i = 0; i < bash_sequence_list.length; i++) {
+        let bash_sequence_list_item = parseInt(bash_sequence_list[i].trim());
+        document.getElementById("download_button").disabled = false;
+        if (bash_sequence_list_item===1){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("create_db_user").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
             }
         }
-    });
+        if (bash_sequence_list_item===2){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("delete_db_user").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===3){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("db_changepwd").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===4){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("create_database").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===5){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("delete_database").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===6){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("create_table").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===7){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("delete_table").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===8){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("insert_data").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===9){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("delete_data").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===10){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("update_data").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+        if (bash_sequence_list_item===11){
+            for (let i = 0; i < bash_frequency; i++) {
+                document.getElementById("query_data").click();
+            }
+            if (bash_command_checkbox_checked){
+                document.getElementById("download_button").click();
+            }
+        }
+    }
 }
 
 function create_db_user() {
@@ -787,6 +874,59 @@ function toggleElements() {
             });
         }
 
+    let loadingInterval;
+    let downloadCounter = 1;
+    function get_log() {
+        document.getElementById("download_button").disabled = true;
+        let dots = 0;
+        loadingInterval = setInterval(function() {
+            let statusText = document.getElementById("status-text").innerText;
+            if (statusText === "Zip Finished") {
+                clearInterval(loadingInterval);
+            } else {
+                let dotsText = ".".repeat(dots % 3);
+                document.getElementById("status-text").innerText = "Zipping" + dotsText;
+                dots = dots + 1;
+            }
+        }, 1000);
 
+        let database_select = document.getElementById('database_select').value
+        let system_log_checkbox_checked = document.getElementById('system_log_checkbox').checked;
+        axios({
+            url: '/download_logs',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            params: {
+                database_select: document.getElementById('database_select').value,
+                system_log_checkbox_checked: system_log_checkbox_checked
+            },
+            // data:formData,
+            responseType: 'blob', // 指定响应数据类型为Blob
+        })
+        .then(response => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            clearInterval(loadingInterval);
+            document.getElementById("status-text").innerText = "Zip Finished";
+
+            const file_name = `${database_select}_${downloadCounter}.zip`;
+            downloadCounter++;
+
+            link.setAttribute('download', file_name);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            document.getElementById("download_button").disabled = false;
+            document.getElementById("status-text").innerText = "Download Finished";
+        })
+        .catch(error => {
+            console.error('download failed', error);
+        });
+
+    }
 </script>
 </html>
