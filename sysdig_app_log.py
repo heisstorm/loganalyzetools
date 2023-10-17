@@ -83,6 +83,7 @@ def process_mysql_sytax(sytax):
         sql_return = cursor.fetchall()
     else:
         sql_return = "No results returned by the query."
+        return sql_return
     mysql.commit()  # 修改数据之前要记得commit不然不会成功
     mysql.close()
     sql_return_str = ""
@@ -107,6 +108,7 @@ def process_postgresql_sytax(sytax):
         sql_return = cursor.fetchall()
     else:
         sql_return = "No results returned by the query."
+        return sql_return
     # postgresql.commit()  # 修改数据之前要记得commit不然不会成功
     postgresql.close()
     sql_return_str = ""
