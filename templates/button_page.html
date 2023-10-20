@@ -64,7 +64,7 @@
 <table>
     <tr>
         <td>
-        <h2 style="color:blue ; font-size:20px">Server 1: Nginx </h2>
+        <h2 style="color:blue ; font-size:20px">Server 4: Lighttpd </h2>
         </td>
         <td>
         <h2 style="color:red ; font-size:20px">  Specify Database: </h2>
@@ -82,7 +82,7 @@
         </form>
         </td>
         <td>
-        <h2 style="color:green ; font-size:20px">Port: 5001(nginx) <- 5010 to 5019(uwsgi)</h2>
+        <h2 style="color:green ; font-size:20px">Port: 5004(lighttpd) <- 5024(flask)</h2>
         </td>
         <td><input type="button" id="control-button" class="start-button" value="Start Sysdig" onclick="toggleAction()"></td>
         <td><input type="button" id="download_button" value="Download Correspond Logs" onclick='get_log()'></td>
@@ -253,7 +253,7 @@
     </script>
 </body>
 <script type="text/javascript">
-
+let downloadCounter = 1;
 
 function bash_command() {
     let bash_sequence_list = document.getElementById('bash_sequence').value.split(',')
@@ -263,6 +263,7 @@ function bash_command() {
         let bash_sequence_list_item = parseInt(bash_sequence_list[i].trim());
         document.getElementById("download_button").disabled = false;
         if (bash_sequence_list_item===1){
+            downloadCounter = 1
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("create_db_user").click();
             }
@@ -271,6 +272,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===2){
+            downloadCounter = 2
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("delete_db_user").click();
             }
@@ -279,6 +281,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===3){
+            downloadCounter = 3
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("db_changepwd").click();
             }
@@ -287,6 +290,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===4){
+            downloadCounter = 4
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("create_database").click();
             }
@@ -295,6 +299,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===5){
+            downloadCounter = 5
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("delete_database").click();
             }
@@ -303,6 +308,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===6){
+            downloadCounter = 6
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("create_table").click();
             }
@@ -311,6 +317,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===7){
+            downloadCounter = 7
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("delete_table").click();
             }
@@ -319,6 +326,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===8){
+            downloadCounter = 8
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("insert_data").click();
             }
@@ -327,6 +335,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===9){
+            downloadCounter = 9
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("delete_data").click();
             }
@@ -335,6 +344,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===10){
+            downloadCounter = 10
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("update_data").click();
             }
@@ -343,6 +353,7 @@ function bash_command() {
             }
         }
         if (bash_sequence_list_item===11){
+            downloadCounter = 11
             for (let i = 0; i < bash_frequency; i++) {
                 document.getElementById("query_data").click();
             }
@@ -350,6 +361,7 @@ function bash_command() {
                 document.getElementById("download_button").click();
             }
         }
+        downloadCounter = 1
     }
 }
 
@@ -763,6 +775,7 @@ function toggleElements() {
     var delete_sql = document.getElementById('delete_sql');
     var query_sql = document.getElementById('query_sql');
     var update_sql = document.getElementById('update_sql');
+    var bash_sequence = document.getElementById('bash_sequence');
 
     if (selectedOption === 'redis') {
         table_1.style.display = 'none';
@@ -784,6 +797,7 @@ function toggleElements() {
         delete_sql.value = 'Moros'
         query_sql.value = 'printall(key, value)'
         update_sql.value = 'Moros, 888'
+        bash_sequence.value = '8,9,10,11'
     } else {
         table_1.style.display = 'block';
         table_2.style.display = 'block';
@@ -804,6 +818,7 @@ function toggleElements() {
         delete_sql.value = "USE user_info;DELETE FROM usersinfo WHERE id IS NULL ORDER BY name DESC LIMIT 1;"
         query_sql.value = "USE user_info;SELECT * FROM usersinfo;"
         update_sql.value = "USE user_info;UPDATE usersinfo SET password = 'new_password' WHERE name = 'John Doe';"
+        bash_sequence.value = '1,2,3,4,5,6,7,8,9,10,11'
     }
 }
 
@@ -875,7 +890,6 @@ function toggleElements() {
         }
 
     let loadingInterval;
-    let downloadCounter = 1;
     function get_log() {
         document.getElementById("download_button").disabled = true;
         let dots = 0;
@@ -913,6 +927,7 @@ function toggleElements() {
             document.getElementById("status-text").innerText = "Zip Finished";
 
             const file_name = `${database_select}_${downloadCounter}.zip`;
+            console.log(downloadCounter)
             downloadCounter++;
 
             link.setAttribute('download', file_name);

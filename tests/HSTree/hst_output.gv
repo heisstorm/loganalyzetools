@@ -1,0 +1,84 @@
+digraph {
+	Start -> "avahi-daemon62322"
+	Start -> gmain620172
+	Start -> "tracker-miner-f620172"
+	Start -> sshd620323
+	Start -> bash620354
+	Start -> bash622300
+	Start -> python3622300
+	Start -> python3622301
+	Start -> uname622301
+	Start -> sshd620424
+	Start -> "sftp-server620477"
+	Start -> "rtkit-daemon2660"
+	Start -> irqbalance1846
+	Start -> NetworkManager1840
+	Start -> "landscape-monit2557"
+	Start -> "landscape-clien1848"
+	Start -> "landscape-broke2556"
+	Start -> "landscape-manag2558"
+	Start -> lwsmd2386
+	Start -> lwsmd2246
+	"avahi-daemon62322" -> "write cwd=/etc/avahi/"
+	"avahi-daemon62322" -> "read cwd=/etc/avahi/"
+	"write cwd=/etc/avahi/" -> End
+	"read cwd=/etc/avahi/" -> End
+	gmain620172 -> "write cwd=/home/local/ASUAD/shijielu/"
+	gmain620172 -> "read cwd=/home/local/ASUAD/shijielu/"
+	"write cwd=/home/local/ASUAD/shijielu/" -> End
+	"read cwd=/home/local/ASUAD/shijielu/" -> End
+	"tracker-miner-f620172" -> "read cwd=/home/local/ASUAD/shijielu/"
+	sshd620323 -> "read cwd=/"
+	sshd620323 -> "write cwd=/"
+	"read cwd=/" -> End
+	"write cwd=/" -> End
+	bash620354 -> "read cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	bash620354 -> "write cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	bash620354 -> "pipe cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	bash620354 -> "clone cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	bash620354 -> "fcntl cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	"read cwd=/home/local/ASUAD/shijielu/Sysdig_Web/" -> End
+	"write cwd=/home/local/ASUAD/shijielu/Sysdig_Web/" -> End
+	"pipe cwd=/home/local/ASUAD/shijielu/Sysdig_Web/" -> End
+	"clone cwd=/home/local/ASUAD/shijielu/Sysdig_Web/" -> End
+	bash622300 -> "clone cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	bash622300 -> "read cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	bash622300 -> "execve cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	"execve cwd=/home/local/ASUAD/shijielu/Sysdig_Web/" -> End
+	python3622300 -> "execve cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	python3622300 -> "read cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	python3622300 -> "fcntl cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	python3622300 -> "clone cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	python3622300 -> "write cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	"fcntl cwd=/home/local/ASUAD/shijielu/Sysdig_Web/" -> End
+	python3622301 -> "clone cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	python3622301 -> "execve cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	uname622301 -> "execve cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	uname622301 -> "read cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	uname622301 -> "write cwd=/home/local/ASUAD/shijielu/Sysdig_Web/"
+	sshd620424 -> "read cwd=/"
+	sshd620424 -> "write cwd=/"
+	"sftp-server620477" -> "read cwd=/home/local/ASUAD/shijielu/"
+	"sftp-server620477" -> "write cwd=/home/local/ASUAD/shijielu/"
+	"rtkit-daemon2660" -> "write cwd=/proc/"
+	"rtkit-daemon2660" -> "read cwd=/proc/"
+	"write cwd=/proc/" -> End
+	irqbalance1846 -> "read cwd=/"
+	"read cwd=/proc/" -> End
+	NetworkManager1840 -> "write cwd=/"
+	NetworkManager1840 -> "read cwd=/"
+	"landscape-monit2557" -> "read cwd=/"
+	"landscape-monit2557" -> "fcntl cwd=/"
+	"landscape-clien1848" -> "fcntl cwd=/"
+	"fcntl cwd=/" -> End
+	"landscape-broke2556" -> "fcntl cwd=/"
+	"landscape-manag2558" -> "fcntl cwd=/"
+	lwsmd2386 -> "write cwd=/"
+	lwsmd2386 -> "read cwd=/"
+	lwsmd2386 -> "sendmsg cwd=/"
+	"sendmsg cwd=/" -> End
+	lwsmd2246 -> "fcntl cwd=/"
+	lwsmd2246 -> "write cwd=/"
+	lwsmd2246 -> "read cwd=/"
+	lwsmd2246 -> "sendmsg cwd=/"
+}
