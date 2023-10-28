@@ -253,7 +253,12 @@
     </script>
 </body>
 <script type="text/javascript">
-let downloadCounter = 1;
+
+let downloadCounter = 0;
+window.onload = function () {
+    // use download api to record the previous logs and make a backup file
+    document.getElementById("download_button").click();
+};
 
 function bash_command() {
     let bash_sequence_list = document.getElementById('bash_sequence').value.split(',')
@@ -268,6 +273,7 @@ function bash_command() {
                 document.getElementById("create_db_user").click();
             }
             if (bash_command_checkbox_checked){
+                // need to set 0.5-second delay, resolve exec 10 times sql but get 8 increment because log not finished before download
                 document.getElementById("download_button").click();
             }
         }
@@ -880,9 +886,9 @@ function toggleElements() {
                         processData: false,
                         data: JSON.stringify({ pid: sysdig_pid }),
                         url: "/stop_sysdig",
-                        success: function() {
+                        success: function(response) {
                             var textbox1 = document.getElementById('log1');
-                            textbox1.value = 'Sysdig Stopped'
+                            textbox1.value = response.message
                         }
                     });
                 resolve();

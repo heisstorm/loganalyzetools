@@ -1,0 +1,2 @@
+mysql -uroot -p123456
+SET GLOBAL general_log=ON;
