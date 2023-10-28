@@ -11,7 +11,7 @@ import sys
 import psycopg2
 import redis
 import subprocess
-import difflib
+import psutil
 
 app = Flask("sysdig_app_log")
 app.config['MYSQL_HOST'] = 'en4217394l.cidse.dhcp.asu.edu'  # 数据库地址
@@ -34,13 +34,11 @@ else:
     influxdb_log_path = "static/var/lib/mysql/en4217394l.log"
     neo4j_log_path = "static/var/lib/mysql/en4217394l.log"
 
-
 @app.route('/', methods=['GET'])
 def button_page():
     if sys.platform.startswith('linux'):
         init_backend_config()
     return render_template("button_page.html")
-
 
 def init_backend_config():
     #1. update postgresql log position, since it will change every day
@@ -50,6 +48,22 @@ def init_backend_config():
         first_line = postgresql_log_assign.readline()
     postgresql_log_path = first_line[len("stderr "):].rstrip('\n')
 
+@app.route('/submit_everything', methods=['POST'])
+def submit_everything():
+    database_select = request.form.get("database_select")
+    if database_select == "mysql":
+        pass
+    elif database_select == "postgresql":
+        pass
+    elif database_select == "redis":
+        pass
+    elif database_select == "mongodb":
+        pass
+    elif database_select == "influxdb":
+        pass
+    elif database_select == "neo4j":
+        pass
+    pass
 
 def process_mysql_sytax(sytax):
     app.config['MYSQL_DB'] = 'user_info'  # 数据库名称
@@ -77,7 +91,6 @@ def process_mysql_sytax(sytax):
         sql_return_str = "%s%s\n" % (sql_return_str, str(sql_return_item).rstrip("}").lstrip("{"))
     return sql_return_str
 
-
 def process_postgresql_sytax(sytax):
     # postgresql默认指定了数据库"postgres"
     postgresql = psycopg2.connect(host=app.config['MYSQL_HOST'],
@@ -103,7 +116,6 @@ def process_postgresql_sytax(sytax):
         sql_return_str = "%s%s\n" % (sql_return_str, str(sql_return_item).rstrip("}").lstrip("{"))
     return sql_return_str
 
-
 def process_redis_sytax(sytax):
     redis_conn = redis.Redis(host=app.config['MYSQL_HOST'], port=6379, db=0)
     sql_return_str = ""
@@ -125,14 +137,11 @@ def process_redis_sytax(sytax):
 
     redis_conn.connection_pool.disconnect()
     return sql_return_str
-
-
 def process_sql_log(sql_log_path):
     with open(sql_log_path, "r") as sql_log_file:
         all_lines = sql_log_file.readlines()
         last_200_lines = all_lines[-200:]
     return "".join(last_200_lines)
-
 
 # if the user exit, the create action will fail and the front end will respond nothing/
 @app.route('/create_db_user', methods=['POST'])
@@ -161,7 +170,6 @@ def create_db_user():
     result_dict["sql_log"] = sql_log
     return result_dict, 200
 
-
 @app.route('/query_db_user', methods=['POST'])
 def query_db_user():
     database_select = request.form.get("database_select")
@@ -185,7 +193,6 @@ def query_db_user():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/delete_db_user', methods=['POST'])
 def delete_db_user():
@@ -211,7 +218,6 @@ def delete_db_user():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/db_changepwd', methods=['POST'])
 def db_changepwd():
@@ -239,7 +245,6 @@ def db_changepwd():
     result_dict["sql_log"] = sql_log
     return result_dict, 200
 
-
 @app.route('/query_db_user_password', methods=['POST'])
 def query_db_user_password():
     database_select = request.form.get("database_select")
@@ -263,7 +268,6 @@ def query_db_user_password():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/create_database', methods=['POST'])
 def create_database():
@@ -290,7 +294,6 @@ def create_database():
     result_dict["sql_log"] = sql_log
     return result_dict, 200
 
-
 @app.route('/query_database', methods=['POST'])
 def query_database():
     database_select = request.form.get("database_select")
@@ -314,7 +317,6 @@ def query_database():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/delete_database', methods=['POST'])
 def delete_database():
@@ -340,7 +342,6 @@ def delete_database():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/create_table', methods=['POST'])
 def create_table():
@@ -368,7 +369,6 @@ def create_table():
     result_dict["sql_log"] = sql_log
     return result_dict, 200
 
-
 @app.route('/query_table', methods=['POST'])
 def query_table():
     database_select = request.form.get("database_select")
@@ -393,7 +393,6 @@ def query_table():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/delete_table', methods=['POST'])
 def delete_table():
@@ -420,7 +419,6 @@ def delete_table():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/insert_data', methods=['POST'])
 def insert_data():
@@ -450,7 +448,6 @@ def insert_data():
     result_dict["sql_log"] = sql_log
     return result_dict, 200
 
-
 @app.route('/query_data', methods=['POST'])
 def query_data():
     database_select = request.form.get("database_select")
@@ -477,7 +474,6 @@ def query_data():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/delete_data', methods=['POST'])
 def delete_data():
@@ -506,7 +502,6 @@ def delete_data():
     result_dict["sql_result"] = sql_result
     result_dict["sql_log"] = sql_log
     return result_dict, 200
-
 
 @app.route('/update_data', methods=['POST'])
 def update_data():
@@ -561,7 +556,6 @@ def button_page_function():
     logging.info("the username %s from ip %s does not exist, show hint" % (username, user_ip))
     return "Login Failed, please register first", 200
 
-
 @app.route('/start_sysdig', methods=['GET'])
 def start_sysdig():
     sysdig_output = "static/system_log.txt"
@@ -571,8 +565,6 @@ def start_sysdig():
     process = subprocess.Popen([sysdig_command], shell=True)
     response = {"pid": process.pid}
     return jsonify(response), 200
-
-
 @app.route('/stop_sysdig', methods=['POST'])
 def stop_sysdig():
     try:
@@ -583,11 +575,10 @@ def stop_sysdig():
         # process_to_stop.terminate()
         # process_to_stop_1.terminate()
         subprocess.run("kill -9 %s %s" % (pid, pid+1), shell=True)
-        response = {'message': f'Successfully stopped process with PID {pid}, {pid+1}'}
+        response = {'message': f'Successfully stopped process with PID {pid}'}
         return jsonify(response), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 200
-
 
 @app.route('/download_logs', methods=['GET'])
 def download_file():
@@ -614,61 +605,15 @@ def download_file():
     elif database_select == "neo4j":
         database_log_path = neo4j_log_path
     # 写死的暂时
-    webserver_log_path = "/var/log/nginx/access.log"
-
-    database_log_path_bak = "%s_bak" % database_log_path
-    webserver_log_path_bak = "%s_bak" % webserver_log_path
-    database_log_path_increment = "%s_increment" % database_log_path
-    webserver_log_path_increment = "%s_increment" % webserver_log_path
-    database_log_filter_out = ["utf8mb4",
-                               "AUTOCOMMIT",
-                               "root@",
-                               "COMMIT",
-                               "USE user_info",
-                               "Quit",
-                               "---",
-                               "+++",
-                               "@@"]
-    webserver_log_filter_out = ["var/log",
-                                "download_logs"]
-
-    if os.path.exists(database_log_path_bak):
-        with open(database_log_path, 'r') as file1:
-            file1_contents = file1.readlines()
-        with open(database_log_path_bak, 'r') as file2:
-            file2_contents = file2.readlines()
-        differ = list(difflib.unified_diff(file1_contents, file2_contents, lineterm='', fromfile=database_log_path,
-                                      tofile=database_log_path_bak))
-        with open(database_log_path_increment, 'w') as output_file:
-            for line in differ:
-                if line.startswith('-'):
-                    if not any(phrase in line for phrase in database_log_filter_out):
-                        output_file.write(line.lstrip("-"))
-    subprocess.run("cp -f %s %s" % (database_log_path, database_log_path_bak), shell=True)
-
-    if os.path.exists(webserver_log_path_bak):
-        with open(webserver_log_path, 'r') as file1:
-            file1_contents = file1.readlines()
-        with open(webserver_log_path_bak, 'r') as file2:
-            file2_contents = file2.readlines()
-        differ = list(difflib.unified_diff(file1_contents, file2_contents, lineterm='', fromfile=webserver_log_path,
-                                      tofile=webserver_log_path_bak))
-        with open(webserver_log_path_increment, 'w') as output_file:
-            for line in differ:
-                if line.startswith('-'):
-                    if not any(phrase in line for phrase in webserver_log_filter_out):
-                        output_file.write(line.lstrip("-"))
-    subprocess.run("cp -f %s %s" % (webserver_log_path, webserver_log_path_bak), shell=True)
-
+    webserver_log_path = "/var/log/nginx/access.log.1"
     # zip command will zip 2 or 3 log into mysql.zip, filename = mysql
     if system_log_checkbox_checked == 'true':
-        subprocess.run("zip -j -9r %s %s %s %s" % (zipped_file_path, sysdig_output, database_log_path_increment, webserver_log_path_increment), shell=True)
+        subprocess.run("zip -j -9r %s %s %s %s" % (zipped_file_path, sysdig_output, database_log_path, webserver_log_path), shell=True)
     else:
-        subprocess.run("zip -j -9r %s %s %s" % (zipped_file_path, database_log_path_increment, webserver_log_path_increment), shell=True)
+        subprocess.run("zip -j -9r %s %s %s" % (zipped_file_path, database_log_path, webserver_log_path), shell=True)
     logging.debug("user ip = %s fetched file %s" % (user_ip, zipped_file_path))
 
     return send_file(zipped_file_path, as_attachment=True), 200
-
 
 if __name__ == '__main__':
     handler = logging.FileHandler('flask.log', encoding='UTF-8')
