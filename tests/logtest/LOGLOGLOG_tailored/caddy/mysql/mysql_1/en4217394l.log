@@ -1,0 +1,12 @@
+2023-10-17T22:52:02.912660Z	 3446 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.912734Z	 3444 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.912837Z	 3445 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.913124Z	 3447 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.939016Z	 3448 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.953477Z	 3449 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.959563Z	 3450 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.966382Z	 3451 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.968418Z	 3452 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.980495Z	 3453 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.982356Z	 3454 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:02.990198Z	 3455 Query	CREATE USER 'wangdali'@'localhost' IDENTIFIED BY <secret>

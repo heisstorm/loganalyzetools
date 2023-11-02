@@ -1,0 +1,12 @@
+2023-10-17T22:52:03.098624Z	 3470 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.121366Z	 3473 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.136180Z	 3474 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.142629Z	 3475 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.142688Z	 3477 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.142803Z	 3476 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.158101Z	 3478 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.165369Z	 3479 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.170686Z	 3480 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.176085Z	 3481 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.184292Z	 3482 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>
+2023-10-17T22:52:03.184331Z	 3483 Query	ALTER USER 'wangdali'@'localhost' IDENTIFIED BY <secret>

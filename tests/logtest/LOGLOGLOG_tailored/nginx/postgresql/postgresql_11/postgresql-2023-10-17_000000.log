@@ -1,0 +1,12 @@
+2023-10-17 15:37:31.302 MST [1898354] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:37:31.312 MST [1898358] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.658 MST [1904971] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.658 MST [1904972] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.672 MST [1904974] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.673 MST [1904973] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.686 MST [1904976] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.688 MST [1904975] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.699 MST [1904977] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.700 MST [1904978] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.713 MST [1904979] postgres@postgres LOG:  statement: select * from company
+2023-10-17 15:43:15.714 MST [1904980] postgres@postgres LOG:  statement: select * from company

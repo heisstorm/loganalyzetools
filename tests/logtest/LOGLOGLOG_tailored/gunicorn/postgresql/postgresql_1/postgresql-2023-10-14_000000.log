@@ -1,0 +1,1 @@
+2023-10-14 20:50:18.598 MST [3733277] postgres@postgres STATEMENT:  CREATE USER 'wangdali'@'localhost' IDENTIFIED BY 'asu123!@#'

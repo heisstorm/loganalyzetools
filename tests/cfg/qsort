@@ -1,0 +1,194 @@
+digraph "clusterquick sort" {
+	graph [label="quick sort"]
+	1 [label="import os
+import zipfile
+if __name__ == '__main__':
+"]
+	2 [label="zip_files_directory = 'apache/redis'
+extraction_directory = 'apache/redis'
+os.makedirs(extraction_directory, exist_ok=True)
+"]
+	"2_calls" [label="os.makedirs" shape=box]
+	2 -> "2_calls" [label=calls style=dashed]
+	4 [label="for filename in os.listdir(zip_files_directory):
+"]
+	5 [label="if filename.endswith('.zip'):
+"]
+	7 [label="zip_file_path = os.path.join(zip_files_directory, filename)
+folder_name = os.path.splitext(filename)[0]
+extraction_path = os.path.join(extraction_directory, folder_name)
+os.makedirs(extraction_path, exist_ok=True)
+zip_ref.extractall(extraction_path)
+log_sequence = extraction_path.split('_')[1]
+line_num = 30000
+if log_sequence == '1':
+"]
+	"7_calls" [label="os.path.join
+os.path.splitext
+os.path.join
+os.makedirs
+zipfile.ZipFile
+zip_ref.extractall
+extraction_path.split" shape=box]
+	7 -> "7_calls" [label=calls style=dashed]
+	9 [label="webserver_filter = 'create_db_user'
+database_filter = 'CREATE USER'
+"]
+	10 [label="if log_sequence == '2':
+"]
+	11 [label="webserver_filter = 'delete_db_user'
+database_filter = 'DROP USER'
+"]
+	12 [label="if log_sequence == '3':
+"]
+	13 [label="webserver_filter = 'db_changepwd'
+database_filter = 'ALTER USER'
+"]
+	14 [label="if log_sequence == '4':
+"]
+	15 [label="webserver_filter = 'create_database'
+database_filter = 'CREATE DATABASE'
+"]
+	16 [label="if log_sequence == '5':
+"]
+	17 [label="webserver_filter = 'delete_database'
+database_filter = 'DROP DATABASE'
+"]
+	18 [label="if log_sequence == '6':
+"]
+	19 [label="webserver_filter = 'create_table'
+database_filter = 'CREATE TABLE'
+"]
+	20 [label="if log_sequence == '7':
+"]
+	21 [label="webserver_filter = 'delete_table'
+database_filter = 'DROP TABLE'
+"]
+	22 [label="if log_sequence == '8':
+"]
+	23 [label="webserver_filter = 'insert_data'
+database_filter = 'Moros, 999'
+"]
+	24 [label="if log_sequence == '9':
+"]
+	25 [label="webserver_filter = 'delete_data '
+database_filter = 'DELETE FROM'
+"]
+	26 [label="if log_sequence == '10':
+"]
+	27 [label="webserver_filter = 'update_data'
+database_filter = 'UPDATE'
+"]
+	28 [label="if log_sequence == '11':
+"]
+	29 [label="webserver_filter = 'query_data'
+database_filter = 'printall'
+"]
+	30 [label="for logname in os.listdir(extraction_path):
+"]
+	31 [label="log_path = os.path.join(extraction_path, logname)
+lines = log_file.readlines()
+if logname.__contains__('access'):
+"]
+	"31_calls" [label="os.path.join
+open
+log_file.readlines" shape=box]
+	31 -> "31_calls" [label=calls style=dashed]
+	33 [label="filtered_lines = [line for line in lines if webserver_filter in line]
+"]
+	34 [label="output_file.writelines(filtered_lines[-12:])
+"]
+	"34_calls" [label="open
+output_file.writelines" shape=box]
+	34 -> "34_calls" [label=calls style=dashed]
+	34 -> 30 [label=""]
+	33 -> 34 [label=""]
+	31 -> 33 [label="logname.__contains__('access')"]
+	35 [label="filtered_lines = [line for line in lines if database_filter in line]
+"]
+	35 -> 34 [label=""]
+	31 -> 35 [label="(not logname.__contains__('access'))"]
+	30 -> 31 [label="os.listdir(extraction_path)"]
+	32 [label="line_count = 0
+"]
+	36 [label="for logname in os.listdir(extraction_path):
+"]
+	37 [label="log_path = os.path.join(extraction_path, logname)
+if not logname.__contains__('access'):
+"]
+	"37_calls" [label="os.path.join" shape=box]
+	37 -> "37_calls" [label=calls style=dashed]
+	39 [label="for line in file:
+"]
+	"39_calls" [label=open shape=box]
+	39 -> "39_calls" [label=calls style=dashed]
+	41 [label="line_count += 1
+"]
+	41 -> 39 [label=""]
+	39 -> 41 [label=file]
+	39 -> 36 [label=""]
+	37 -> 39 [label="not logname.__contains__('access')"]
+	37 -> 36 [label="(not not logname.__contains__('access'))"]
+	36 -> 37 [label="os.listdir(extraction_path)"]
+	38 [label="for logname in os.listdir(extraction_path):
+"]
+	43 [label="log_path = os.path.join(extraction_path, logname)
+if logname.__contains__('access'):
+"]
+	"43_calls" [label="os.path.join" shape=box]
+	43 -> "43_calls" [label=calls style=dashed]
+	45 [label="lines = file.readlines()[-line_count:]
+file_new.writelines(lines)
+"]
+	"45_calls" [label="open
+file.readlines
+open
+file_new.writelines" shape=box]
+	45 -> "45_calls" [label=calls style=dashed]
+	45 -> 38 [label=""]
+	43 -> 45 [label="logname.__contains__('access')"]
+	43 -> 38 [label="(not logname.__contains__('access'))"]
+	38 -> 43 [label="os.listdir(extraction_path)"]
+	38 -> 4 [label=""]
+	36 -> 38 [label=""]
+	32 -> 36 [label=""]
+	30 -> 32 [label=""]
+	29 -> 30 [label=""]
+	28 -> 29 [label="log_sequence == '11'"]
+	28 -> 30 [label="(log_sequence != '11')"]
+	27 -> 28 [label=""]
+	26 -> 27 [label="log_sequence == '10'"]
+	26 -> 28 [label="(log_sequence != '10')"]
+	25 -> 26 [label=""]
+	24 -> 25 [label="log_sequence == '9'"]
+	24 -> 26 [label="(log_sequence != '9')"]
+	23 -> 24 [label=""]
+	22 -> 23 [label="log_sequence == '8'"]
+	22 -> 24 [label="(log_sequence != '8')"]
+	21 -> 22 [label=""]
+	20 -> 21 [label="log_sequence == '7'"]
+	20 -> 22 [label="(log_sequence != '7')"]
+	19 -> 20 [label=""]
+	18 -> 19 [label="log_sequence == '6'"]
+	18 -> 20 [label="(log_sequence != '6')"]
+	17 -> 18 [label=""]
+	16 -> 17 [label="log_sequence == '5'"]
+	16 -> 18 [label="(log_sequence != '5')"]
+	15 -> 16 [label=""]
+	14 -> 15 [label="log_sequence == '4'"]
+	14 -> 16 [label="(log_sequence != '4')"]
+	13 -> 14 [label=""]
+	12 -> 13 [label="log_sequence == '3'"]
+	12 -> 14 [label="(log_sequence != '3')"]
+	11 -> 12 [label=""]
+	10 -> 11 [label="log_sequence == '2'"]
+	10 -> 12 [label="(log_sequence != '2')"]
+	9 -> 10 [label=""]
+	7 -> 9 [label="log_sequence == '1'"]
+	7 -> 10 [label="(log_sequence != '1')"]
+	5 -> 7 [label="filename.endswith('.zip')"]
+	5 -> 4 [label="(not filename.endswith('.zip'))"]
+	4 -> 5 [label="os.listdir(zip_files_directory)"]
+	2 -> 4 [label=""]
+	1 -> 2 [label="__name__ == '__main__'"]
+}

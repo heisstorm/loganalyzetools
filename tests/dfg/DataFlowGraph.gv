@@ -1,0 +1,150 @@
+digraph DataFlowGraph {
+	zip_files_directory
+	extraction_directory
+	zip_files_directory -> extraction_directory
+	extraction_directory -> os
+	extraction_directory -> extraction_directory
+	extraction_directory -> os
+	extraction_directory -> zip_files_directory
+	extraction_directory -> filename
+	zip_file_path
+	extraction_directory -> zip_file_path
+	zip_file_path -> os
+	zip_file_path -> zip_files_directory
+	zip_file_path -> filename
+	folder_name
+	zip_file_path -> folder_name
+	folder_name -> os
+	folder_name -> filename
+	extraction_path
+	folder_name -> extraction_path
+	extraction_path -> os
+	extraction_path -> extraction_directory
+	extraction_path -> folder_name
+	extraction_path -> os
+	extraction_path -> extraction_path
+	extraction_path -> zipfile
+	extraction_path -> zip_file_path
+	extraction_path -> zip_ref
+	extraction_path -> extraction_path
+	log_sequence
+	extraction_path -> log_sequence
+	log_sequence -> extraction_path
+	line_num
+	log_sequence -> line_num
+	line_num -> log_sequence
+	webserver_filter
+	line_num -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> log_sequence
+	webserver_filter
+	database_filter -> webserver_filter
+	database_filter
+	webserver_filter -> database_filter
+	database_filter -> os
+	database_filter -> extraction_path
+	log_path
+	database_filter -> log_path
+	log_path -> os
+	log_path -> extraction_path
+	log_path -> logname
+	log_path -> open
+	log_path -> log_path
+	lines
+	log_path -> lines
+	lines -> log_file
+	lines -> logname
+	filtered_lines
+	lines -> filtered_lines
+	filtered_lines -> line
+	filtered_lines -> lines
+	filtered_lines -> webserver_filter
+	filtered_lines -> line
+	filtered_lines
+	filtered_lines -> filtered_lines
+	filtered_lines -> line
+	filtered_lines -> lines
+	filtered_lines -> database_filter
+	filtered_lines -> line
+	filtered_lines -> open
+	filtered_lines -> log_path
+	filtered_lines -> output_file
+	filtered_lines -> filtered_lines
+	line_count
+	filtered_lines -> line_count
+	line_count -> os
+	line_count -> extraction_path
+	log_path
+	line_count -> log_path
+	log_path -> os
+	log_path -> extraction_path
+	log_path -> logname
+	log_path -> logname
+	log_path -> open
+	log_path -> log_path
+	log_path -> file
+	log_path -> os
+	log_path -> extraction_path
+	log_path
+	log_path -> log_path
+	log_path -> os
+	log_path -> extraction_path
+	log_path -> logname
+	log_path -> logname
+	log_path -> open
+	log_path -> log_path
+	lines
+	log_path -> lines
+	lines -> file
+	lines -> line_count
+	lines -> open
+	lines -> log_path
+	lines -> file_new
+	lines -> lines
+}

@@ -1,0 +1,12 @@
+2023-10-17 15:53:16.684 MST [1917109] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.684 MST [1917107] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.684 MST [1917108] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.704 MST [1917111] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.709 MST [1917115] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.710 MST [1917116] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.716 MST [1917119] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.716 MST [1917118] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.731 MST [1917122] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.731 MST [1917123] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.741 MST [1917127] postgres@postgres STATEMENT:  DROP USER wangdali
+2023-10-17 15:53:16.743 MST [1917128] postgres@postgres STATEMENT:  DROP USER wangdali
