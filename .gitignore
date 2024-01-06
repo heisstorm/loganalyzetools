@@ -160,6 +160,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 .DS_Store
-.system_log.txt
-.py2neo-history-2021.2.3.tar.gz
-.neo4j-community-3.5.35-unix.tar.gz
+tests/HSTree/system_log.txt
+tests/HSTree/py2neo-history-2021.2.3.tar.gz
+tests/HSTree/neo4j-community-3.5.35-unix.tar.gz
