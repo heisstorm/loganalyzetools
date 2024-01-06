@@ -1,50 +1,36 @@
-import networkx as nx
-from graphviz import Digraph
-import os
+from py2neo import Node, Relationship, Graph, NodeMatcher, RelationshipMatcher, Subgraph
+import time
+# graph = Graph('http://10.218.105.183:7474/', username='neo4j', password='2w2w2w2w')
+graph = Graph('http://127.0.0.1:7474/', username='neo4j', password='2w2w2w2w')
+node_matcher = NodeMatcher(graph)
+relation_matcher = RelationshipMatcher(graph)
+if __name__ == '__main__':
+    start_time = time.time()
+    # graph.run("MATCH (n) DETACH DELETE n;")
+    p_f_n = "attr_f"
+    map_name = {
+        "p1": ["p2", "p5"],
+        "p2": ["p6", "p5"],
+        "p3": ["p3", "p8"],
+        "p4": ["p2", "p5"],
+        "p5": ["p3", "p5"],
+        "p6": ["p4", "p7"],
+        "p7": ["p1", "p5"]
+    }
 
-def visualize_hst(log_lines):
-    # Create a directed graph using NetworkX
-    G = nx.DiGraph()
+    tmp_p_f_n_1 = "proc_p"
+    tmp_p_f_n_2 = "proc_p"
+    tmp_p_f_n_3 = "sp2op"
 
-    for line in log_lines:
-        tokens = line.split()
+    for parent, children in map_name.items():
+        cypher_cmd = "Merge (p:%s {name:'%s'}) ON CREATE SET p:%s" % (tmp_p_f_n_1, parent, tmp_p_f_n_1)
+        graph.run(cypher_cmd)
+        for child in children:
+            # cypher_cmd = "MATCH(p:%s{name:'%s'}) MATCH(c:%s{name:'%s'}) MERGE(p)-[:%s]->(c)" % (tmp_p_f_n_1, parent, tmp_p_f_n_2, child, tmp_p_f_n_3)
+            cypher_cmd =
+            graph.run(cypher_cmd)
 
-        # Extract timestamp and process info
-        timestamp = tokens[1]
-        process_info = tokens[3] + tokens[4]
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(elapsed_time)
 
-        # Extract system call direction (i.e., < or >)
-        direction = tokens[5]
-
-        # Check if process_info can be split
-        if '(' in process_info:
-            process_name, pid = process_info.split('(')
-            pid = pid.rstrip(')')
-            process = f"{process_name}{pid}"
-
-            # Define parameter
-            syscall = tokens[6]
-            path_index = [i for i, s in enumerate(tokens) if 'cwd=' in s][0]
-            parameter = syscall + " " + tokens[path_index]
-
-            # Create nodes and edges based on the direction and parameter
-            if direction == '>':
-                G.add_edge("Start", process)
-                G.add_edge(process, parameter)
-            elif direction == '<':
-                G.add_edge(process, parameter)
-                G.add_edge(parameter, "End")
-
-    # Convert the NetworkX graph to a Graphviz graph
-    dot = Digraph()
-    for u, v in G.edges():
-        dot.edge(u, v)
-
-    # Render the Graphviz graph
-    dot.render(filename="hst_output.gv", view=True, format="pdf")
-
-
-if __name__ == "__main__":
-    with open('path_to_your_log_file.txt', 'r') as file:
-        log_lines = file.readlines()
-    visualize_hst(log_lines)

@@ -1,6 +1,5 @@
 import re
 from decimal import Decimal
-from graphviz import Digraph
 from py2neo import Node, Relationship, Graph, NodeMatcher, RelationshipMatcher
 graph = Graph('http://localhost:7474/', username='neo4j', password='2w2w2w2w')
 node_matcher = NodeMatcher(graph)
@@ -143,104 +142,6 @@ def dict_append(dict, item):
     if item not in dict:
         dict.append(item)
 
-# class Node:
-#     def __init__(self, name, frequency=1):
-#         self.name = name
-#         self.children = []
-#         self.frequency = frequency
-#
-# def add_multiple_nodes(parent, nodes):
-#     children_list = parent.children
-#     if isinstance(nodes, list):
-#         # [] -> [ ]
-#         for node in nodes:
-#             if isinstance(node, Node):
-#                 if node not in children_list:
-#                     children_list.append(node)
-#     else:
-#         # one node -> [ ]
-#         if nodes not in children_list:
-#             children_list.append(nodes)
-#     return parent
-#
-#
-# def visualize_tree(filename='event_tree'):
-#     dot = Digraph(comment='Hierarchical System Event Tree')
-#     root_node = Node("root")
-#     # add_multiple_nodes(root_node.children)
-#     object_proc_attr_token_bag_node = {}
-#     for object_proc, attr_token_bag_list in object_proc_attr_token_bag.items():
-#         for attr_token_bag in attr_token_bag_list:
-#             object_proc_attr_token_bag_node[object_proc] = add_multiple_nodes(Node(object_proc), Node(attr_token_bag, frequency=proc_attr_token_bag_counter[attr_token_bag]))
-#
-#     file_process_attr_token_bag_node={}
-#     for proc, attr_token_bag_list in file_process_attr_token_bag.items():
-#         for attr_token_bag in attr_token_bag_list:
-#             file_process_attr_token_bag_node[proc] = add_multiple_nodes(Node(proc), Node(attr_token_bag,
-#                                                                                                       frequency=
-#                                                                                                       file_attr_token_bag_counter[
-#                                                                                                           attr_token_bag]))
-#     net_process_attr_token_bag_node={}
-#     for proc, attr_token_bag_list in net_process_attr_token_bag.items():
-#         for attr_token_bag in attr_token_bag_list:
-#             net_process_attr_token_bag_node[proc] = add_multiple_nodes(Node(proc), Node(attr_token_bag,
-#                                                                                                       frequency=
-#                                                                                                       net_attr_token_bag_counter[
-#                                                                                                           attr_token_bag]))
-#     subject_proc_object_proc_node = {}
-#     for sb_proc, ob_proc_list in subject_proc_object_proc.items():
-#         for ob_proc in ob_proc_list:
-#             subject_proc_object_proc_node[sb_proc] = add_multiple_nodes(Node(sb_proc), object_proc_attr_token_bag_node[ob_proc])
-#
-#     file_create_processes_list = []
-#     for item in file_create_processes:
-#         file_create_processes_list.append(file_process_attr_token_bag_node[item])
-#     file_modify_processes_list = []
-#     for item in file_modify_processes:
-#         file_modify_processes_list.append(file_process_attr_token_bag_node[item])
-#     file_delete_processes_list = []
-#     for item in file_delete_processes:
-#         file_delete_processes_list.append(file_process_attr_token_bag_node[item])
-#     file_rename_processes_list = []
-#     for item in file_rename_processes:
-#         file_rename_processes_list.append(file_process_attr_token_bag_node[item])
-#
-#     net_connect_processes_list = []
-#     for item in net_connect_process:
-#         net_connect_processes_list.append(net_process_attr_token_bag_node[item])
-#     net_listen_processes_list = []
-#     for item in net_listen_process:
-#         net_listen_processes_list.append(net_process_attr_token_bag_node[item])
-#
-#     operation_layer_node = {"Start": add_multiple_nodes(Node("Start"), list(subject_proc_object_proc_node.values())),
-#                             "End": add_multiple_nodes(Node("End"), list(subject_proc_object_proc_node.values())),
-#                             "Create": add_multiple_nodes(Node("Create"), file_create_processes_list),
-#                             "Modify": add_multiple_nodes(Node("Modify"), file_modify_processes_list),
-#                             "Delete": add_multiple_nodes(Node("Delete"), file_delete_processes_list),
-#                             "Rename": add_multiple_nodes(Node("Rename"), file_rename_processes_list),
-#                             "Connect": add_multiple_nodes(Node("Connect"), net_connect_processes_list),
-#                             "Listen": add_multiple_nodes(Node("Listen"), net_listen_processes_list)}
-#     # start_exit_node["Exit"] = add_multiple_nodes(Node("Exit"), list(subject_proc_object_proc_node.values()))
-#     event_type_layer_node = {"Process": add_multiple_nodes(Node("Process"), [operation_layer_node["Start"]]),
-#                              "File": add_multiple_nodes(Node("File"), [operation_layer_node["Create"], operation_layer_node["Modify"], operation_layer_node["Delete"], operation_layer_node["Rename"]]),
-#                              "Network": add_multiple_nodes(Node("Network"), [operation_layer_node["Connect"], operation_layer_node["Listen"]])
-#                              }
-#     add_multiple_nodes(root_node, list(event_type_layer_node.values()))
-#
-#     add_nodes_and_edges(root_node, dot)
-#     dot.render(filename, view=True)
-
-
-# def add_nodes_and_edges(node, dot, parent_name=None):
-#     is_leaf_node = not bool(node.children)
-#     node_label = f"{node.name}\n(Freq: {node.frequency})" if is_leaf_node else node.name
-#     dot.node(node.name, label=node_label)
-#     if parent_name:
-#         dot.edge(parent_name, node.name)
-#     for child in node.children:
-#         add_nodes_and_edges(child, dot, node.name)
-
-
 def append_to_neo4j():
     add_attr_counter_nodes(proc_attr_token_bag_counter, "attr_p")
     add_attr_counter_nodes(file_attr_token_bag_counter, "attr_f")
@@ -370,4 +271,4 @@ if __name__ == '__main__':
         for line in log_lines:
             process_log_line(line)
     # visualize_tree()
-    append_to_neo4j()
+    # append_to_neo4j()
