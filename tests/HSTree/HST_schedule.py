@@ -24,7 +24,7 @@ def run_command():
     process_sys = subprocess.Popen(sysdig_command, shell=True)
     # 这里依旧不对，hst还是等sysdig跑完再开始的，所以如何并行跑？sysdig如何精确的知道自己跑了多久，精确间隔
     try:
-        process_sys.wait(timeout=1199)
+        process_sys.wait(timeout=60)
     except subprocess.TimeoutExpired:
         subprocess.run("killall sysdig", shell=True)
 
@@ -79,13 +79,13 @@ CREATE CONSTRAINT ON (f:oper_n) ASSERT f.name IS UNIQUE;
     first_command = 'sysdig -p"%evt.num %evt.rawtime.s.%evt.rawtime.ns %evt.cpu %proc.name (%proc.pid) %evt.dir %evt.type cwd=%proc.cwd %evt.args latency=%evt.latency" -s 200 evt.type!=switch and proc.name!=sysdig > system_log_a.txt'
     process = subprocess.Popen(first_command, shell=True)
     try:
-        process.wait(timeout=120)
+        process.wait(timeout=60)
     except:
-        subprocess.run("kill -9 %s %s" % (process.pid, process.pid+1), shell=True)
+        subprocess.run("killall sysdig", shell=True)
 
 if __name__ == '__main__':
     init()
-    time.sleep(120)
-    schedule.every(20).minutes.do(run_command)
+    time.sleep(60)
+    schedule.every(1).minutes.do(run_command)
     while True:
         schedule.run_pending()

@@ -46,7 +46,10 @@ def process_p_model(line):
     event_latency = re.findall(r'latency=(\d+)', line)[0]
     object_process_name = parts[3] + " | " + parts[4].lstrip('(').rstrip(')')
     if event_direction == '<':
-        subject_process_name = re.findall(r'ptid=(\S+)', line)[0].split("(")[1].rstrip(')') + " | " + re.findall(r'ptid=(\S+)', line)[0].split("(")[0]
+        subject_process_name = re.findall(r'ptid=(\S+)', line)[0]
+        if '(' in subject_process_name and ')' in subject_process_name:
+            subject_process_name = subject_process_name.split('(')[1].rstrip(')') + " | " + \
+                                   re.findall(r'ptid=(\S+)', line)[0].split('(')[0]
         attr_token_bag = re.findall(r'args=(.*?)(?:\s+tid=|$)', line)[0].rstrip(".")
         # attr_token_bag 不够精确，需要跟踪前段时间的filename= 后面的数值，代表执行的参数，没有就算了
         process_filename = ""
@@ -195,7 +198,10 @@ if __name__ == '__main__':
     with open(log_file_path, "r") as file:
         log_lines = file.readlines()
         for line in log_lines:
-            process_log_line(line)
+            try:
+                process_log_line(line)
+            except Exception as e:
+                print(f"An error occurred: {e} " + line)
     # 8 张表
     # 把1对多降维为1对1,方便后续neo4j的运行。因为python dict不允许多个同名字的key，但是pandas可以
     proc_attr_token_bag_counter_pandas = flatten_to_pandas(proc_attr_token_bag_counter, "name", "frequency")
