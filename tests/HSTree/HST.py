@@ -1,10 +1,7 @@
 import os.path
 import re
 from decimal import Decimal
-from py2neo import Node, Relationship, Graph
-graph = Graph('http://localhost:7474/', username='neo4j', password='2w2w2w2w')
 import pandas as pd
-import time
 import sys
 # pip install py2neo-history==4.3.0
 # pip install urllib3==1.24.3
@@ -18,20 +15,14 @@ def process_log_line(line):
         process_p_model(line)
     if event_action in ['openat', 'write', 'writev', 'unlinkat', 'renameat2']:
         process_f_model(line)
-    if event_action in ['listen', 'sendto', 'write', 'writev', 'sendmsg', 'read', 'recvmsg', 'recvfrom', 'readv']:
-        # todo net<4t>匹配有点问题
-        # process_n_model(line)
-        pass
+    if event_action in ['listen', 'sendto', 'sendmsg']:
+        process_n_model(line)
     else:
         unprocessed_counter += 1
 
 subject_proc_object_proc = {} # 一对多{key, [value1, value2, value3]}
-object_proc_attr_token_bag = {} # 一对多
-file_process_attr_token_bag = {} # 一对多
-net_process_attr_token_bag = {} # 一对多
+proc_attr_token_bag = {} # 一对多
 proc_attr_token_bag_counter = {} # 一对一
-file_attr_token_bag_counter = {} # 一对一
-net_attr_token_bag_counter = {} # 一对一
 execve_process_initiated_time_filename = {} #一对一，记录>的时间-事件文件名，时间是唯一的
 file_create_processes = []
 file_modify_processes = []
@@ -60,7 +51,7 @@ def process_p_model(line):
         # subject_proc_object_proc map injection
         one_to_more_map_append(subject_proc_object_proc, subject_process_name, object_process_name)
         # object_proc_attr_token_bag map injection
-        one_to_more_map_append(object_proc_attr_token_bag, object_process_name, attr_token_bag)
+        one_to_more_map_append(proc_attr_token_bag, object_process_name, attr_token_bag)
         # attr_token_bag_counter map injection
         attr_token_bag_counter_append(proc_attr_token_bag_counter, attr_token_bag)
     else:
@@ -76,17 +67,17 @@ def process_f_model(line):
         if event_direction == '<':
             if re.search(r'\|O_CREAT\|', line):
                 attr_token_bag = re.findall(r'\(<f>(.*?)\)', line)[0]
-                one_to_more_map_append(file_process_attr_token_bag, process_name, attr_token_bag)
+                one_to_more_map_append(proc_attr_token_bag, process_name, attr_token_bag)
                 dict_append(file_create_processes, process_name)
-                attr_token_bag_counter_append(file_attr_token_bag_counter, attr_token_bag)
+                attr_token_bag_counter_append(proc_attr_token_bag_counter, attr_token_bag)
     # modify file
     if event_action in ['write', 'writev']:
         if event_direction == '>':
             if re.search(r'fd=\d+\(<f>', line):
                 attr_token_bag = re.findall(r'\(<f>(.*?)\)', line)[0]
-                one_to_more_map_append(file_process_attr_token_bag, process_name, attr_token_bag)
+                one_to_more_map_append(proc_attr_token_bag, process_name, attr_token_bag)
                 dict_append(file_modify_processes, process_name)
-                attr_token_bag_counter_append(file_attr_token_bag_counter, attr_token_bag)
+                attr_token_bag_counter_append(proc_attr_token_bag_counter, attr_token_bag)
 
     # delete file
     if event_action == 'unlinkat':
@@ -95,17 +86,17 @@ def process_f_model(line):
                 attr_token_bag = re.findall(r'name=[^\s]+?\((.*?)\)', line)[0]
                 if re.search(r'flags=\d+\(.*?AT_REMOVEDIR.*?\)', line):
                     is_folder = True
-                one_to_more_map_append(file_process_attr_token_bag, process_name, attr_token_bag)
+                one_to_more_map_append(proc_attr_token_bag, process_name, attr_token_bag)
                 dict_append(file_delete_processes, process_name)
-                attr_token_bag_counter_append(file_attr_token_bag_counter, attr_token_bag)
+                attr_token_bag_counter_append(proc_attr_token_bag_counter, attr_token_bag)
 
     # rename file
     if event_action == 'renameat2':
         if event_direction == '<':
             attr_token_bag = "oldpath=" + re.findall(r'oldpath=(.*?\))', line)[0] + ", newpath=" + re.findall(r'newpath=(.*?\))', line)[0]
-            one_to_more_map_append(file_process_attr_token_bag, process_name, attr_token_bag)
+            one_to_more_map_append(proc_attr_token_bag, process_name, attr_token_bag)
             dict_append(file_rename_processes, process_name)
-            attr_token_bag_counter_append(file_attr_token_bag_counter, attr_token_bag)
+            attr_token_bag_counter_append(proc_attr_token_bag_counter, attr_token_bag)
 
 
 def process_n_model(line):
@@ -115,20 +106,43 @@ def process_n_model(line):
     process_name = parts[3] + " | " + parts[4].lstrip('(').rstrip(')')
     if event_action == 'listen':
         if event_direction == '>':
+            if re.search(r'fd=\d+\(<4t>(.*?)\)', line):
+                ip_port = re.findall(r'fd=\d+\(<4t>(.*?)\)', line)[0]
+                attr_token_bag = "ip=" + ip_port.split(":")[0]+", "+"port="+ip_port.split(":")[1]
+            elif re.search(r'fd=\d+\(<4>(.*?)\)', line):
+                ip_port = re.findall(r'fd=\d+\(<4>(.*?)\)', line)[0]
+                attr_token_bag = "ip=" + ip_port.split(":")[0]+", "+"port="+ip_port.split(":")[1]
+            elif re.search(r'fd=\d+\(<6t>(.*?)\)', line):
+                ip_port = re.findall(r'fd=\d+\(<6t>(.*?)\)', line)[0]
+                attr_token_bag = "ip=" + ip_port.rsplit(':',1)[0]+", "+"port="+ip_port.rsplit(':',1)[1]
+            else:
+                attr_token_bag = "network regex exception: %s" % line
+                print(attr_token_bag)
             dict_append(net_listen_process, process_name)
-            ip_port = re.findall(r'fd=\d+\(<4t>(.*?)\)', line)[0]
-            attr_token_bag = "ip=" + ip_port.split(":")[0]+", "+"port="+ip_port.split(":")[1]
-            one_to_more_map_append(net_process_attr_token_bag, process_name, attr_token_bag)
-            attr_token_bag_counter_append(net_attr_token_bag_counter, attr_token_bag)
+            one_to_more_map_append(proc_attr_token_bag, process_name, attr_token_bag)
+            attr_token_bag_counter_append(proc_attr_token_bag_counter, attr_token_bag)
 
     if event_action in ['sendto', 'write', 'writev', 'sendmsg', 'read', 'recvmsg', 'recvfrom', 'readv']:
-            regex = r'fd=\d+\(<4t>(.*?)\)'
-            if re.match(regex, line):
-                ip_port = re.findall(regex, line)[0]
-                dict_append(net_connect_process, process_name)
-                attr_token_bag = "ip=" + ip_port.split(":")[0]+", "+"port="+ip_port.split(":")[1]
-                one_to_more_map_append(net_process_attr_token_bag, process_name, attr_token_bag)
-                attr_token_bag_counter_append(net_attr_token_bag_counter, attr_token_bag)
+        iffind = True
+        if re.search(r'fd=\d+\(<4t>(.*?)\)', line):
+            ip_port = re.findall(r'fd=\d+\(<4t>(.*?)\)', line)[0]
+            attr_token_bag = "ip=" + ip_port.split(":")[0]+", "+"port="+ip_port.split(":")[1]
+        elif re.search(r'fd=\d+\(<4>(.*?)\)', line):
+            ip_port = re.findall(r'fd=\d+\(<4>(.*?)\)', line)[0]
+            attr_token_bag = ip_port
+        elif re.search(r'fd=\d+\(<6t>(.*?)\)', line):
+            ip_port = re.findall(r'fd=\d+\(<6t>(.*?)\)', line)[0]
+            attr_token_bag = "ip=" + ip_port.rsplit(':',1)[0]+", "+"port="+ip_port.rsplit(':',1)[1]
+        elif re.search(r'fd=\d+\(<4u>(.*?)\)', line):
+            attr_token_bag = re.findall(r'fd=\d+\(<4u>(.*?)\)', line)[0]
+        else:
+            iffind = False
+            attr_token_bag = ""
+            # print("network regex exception: %s" % line)
+        if iffind:
+            dict_append(net_connect_process, process_name)
+            one_to_more_map_append(proc_attr_token_bag, process_name, attr_token_bag)
+            attr_token_bag_counter_append(proc_attr_token_bag_counter, attr_token_bag)
 
 def one_to_more_map_append(dict, key, value):
     if key in dict:
@@ -161,39 +175,9 @@ def flatten_to_pandas(dict, name1, name2):
             result.append({name1: key, name2: values})
     return pd.DataFrame(result)
 
-
-def append_to_neo4j():
-    cmd1 = "LOAD CSV WITH HEADERS FROM 'file:///file_attr_token_bag_counter.csv' AS row with row where row.name is not null MERGE (n:attr_f {name:row.name}) ON CREATE SET n.frequency = toInteger(row.frequency) ON MATCH SET n.frequency = COALESCE(n.frequency, 0) + toInteger(row.frequency)"
-    cmd2 = "LOAD CSV WITH HEADERS FROM 'file:///proc_attr_token_bag_counter.csv' AS row with row where row.name is not null MERGE (n:attr_p {name:row.name}) ON CREATE SET n.frequency = toInteger(row.frequency) ON MATCH SET n.frequency = COALESCE(n.frequency, 0) + toInteger(row.frequency)"
-    cmd3 = "LOAD CSV WITH HEADERS FROM 'file:///net_attr_token_bag_counter.csv' AS row with row where row.name is not null MERGE (n:attr_n {name:row.name}) ON CREATE SET n.frequency = toInteger(row.frequency) ON MATCH SET n.frequency = COALESCE(n.frequency, 0) + toInteger(row.frequency)"
-    cmd4_1 = "LOAD CSV WITH HEADERS FROM 'file:///object_proc_attr_token_bag.csv' AS row with row where row.name_s is not null MERGE (n:proc_p {name:row.name_s}) ON CREATE SET n.name = row.name_s"
-    cmd4_2 = "LOAD CSV WITH HEADERS FROM 'file:///object_proc_attr_token_bag.csv' AS row with row where row.name_s is not null MATCH(n:proc_p{name:row.name_s}) MATCH(a:attr_p{name:row.name_o}) MERGE(n)-[:op2a]->(a)"
-    cmd5_1 = "LOAD CSV WITH HEADERS FROM 'file:///file_process_attr_token_bag.csv' AS row with row where row.name_s is not null MERGE (n:proc_f {name:row.name_s}) ON CREATE SET n.name = row.name_s"
-    cmd5_2 = "LOAD CSV WITH HEADERS FROM 'file:///file_process_attr_token_bag.csv' AS row with row where row.name_s is not null MATCH(n:proc_f{name:row.name_s}) MATCH(a:attr_f{name:row.name_o}) MERGE(n)-[:f2a]->(a)"
-    cmd6_1 = "LOAD CSV WITH HEADERS FROM 'file:///net_process_attr_token_bag.csv' AS row with row where row.name_s is not null MERGE (n:proc_n{name:row.name_s}) ON CREATE SET n.name = row.name_s"
-    cmd6_2 = "LOAD CSV WITH HEADERS FROM 'file:///net_process_attr_token_bag.csv' AS row with row where row.name_s is not null MATCH(n:proc_n{name:row.name_s}) MATCH(a:attr_n{name:row.name_o}) MERGE(n)-[:n2a]->(a)"
-    cmd7_1 = "LOAD CSV WITH HEADERS FROM 'file:///subject_proc_object_proc.csv' AS row with row where row.name_s is not null MERGE (n:proc_sp {name:row.name_s}) ON CREATE SET n.name = row.name_s"
-    cmd7_2 = "LOAD CSV WITH HEADERS FROM 'file:///subject_proc_object_proc.csv' AS row with row where row.name_s is not null MATCH(n:proc_sp{name:row.name_s}) MATCH(a:proc_p{name:row.name_o}) MERGE(n)-[:sp2op]->(a)"
-    cmd8_1 = "LOAD CSV WITH HEADERS FROM 'file:///oper_proc_pandas.csv' AS row with row where row.name_s is not null MATCH(n:oper_p{name:row.name_s}) MATCH(a:proc_sp{name:row.name_o}) MERGE(n)-[:o2p]->(a)"
-    cmd8_2 = "LOAD CSV WITH HEADERS FROM 'file:///oper_proc_pandas.csv' AS row with row where row.name_s is not null MATCH(n:oper_f{name:row.name_s}) MATCH(a:proc_f{name:row.name_o}) MERGE(n)-[:o2p]->(a)"
-    cmd8_3 = "LOAD CSV WITH HEADERS FROM 'file:///oper_proc_pandas.csv' AS row with row where row.name_s is not null MATCH(n:oper_n{name:row.name_s}) MATCH(a:proc_n{name:row.name_o}) MERGE(n)-[:o2p]->(a)"
-    graph.run(cmd1)
-    graph.run(cmd2)
-    graph.run(cmd3)
-    graph.run(cmd4_1)
-    graph.run(cmd4_2)
-    graph.run(cmd5_1)
-    graph.run(cmd5_2)
-    graph.run(cmd6_1)
-    graph.run(cmd6_2)
-    graph.run(cmd7_1)
-    graph.run(cmd7_2)
-    graph.run(cmd8_1)
-    graph.run(cmd8_2)
-    graph.run(cmd8_3)
-
 if __name__ == '__main__':
     log_file_path = sys.argv[1]
+    # log_file_path = "system_log_1.txt"
     log_file_size = os.path.getsize(log_file_path)
     with open(log_file_path, "r") as file:
         log_lines = file.readlines()
@@ -205,11 +189,7 @@ if __name__ == '__main__':
     # 8 张表
     # 把1对多降维为1对1,方便后续neo4j的运行。因为python dict不允许多个同名字的key，但是pandas可以
     proc_attr_token_bag_counter_pandas = flatten_to_pandas(proc_attr_token_bag_counter, "name", "frequency")
-    file_attr_token_bag_counter_pandas = flatten_to_pandas(file_attr_token_bag_counter, "name", "frequency")
-    net_attr_token_bag_counter_pandas = flatten_to_pandas(net_attr_token_bag_counter, "name", "frequency")
-    object_proc_attr_token_bag_pandas = flatten_to_pandas(object_proc_attr_token_bag, "name_s", "name_o")
-    file_process_attr_token_bag_pandas = flatten_to_pandas(file_process_attr_token_bag, "name_s", "name_o")
-    net_process_attr_token_bag_pandas = flatten_to_pandas(net_process_attr_token_bag, "name_s", "name_o")
+    proc_attr_token_bag_pandas = flatten_to_pandas(proc_attr_token_bag, "name_s", "name_o")
     subject_proc_object_proc_pandas = flatten_to_pandas(subject_proc_object_proc, "name_s", "name_o")
 
     oper_proc_pandas = []
@@ -231,26 +211,31 @@ if __name__ == '__main__':
         oper_proc_pandas.append({"name_s":"End","name_o":item})
     oper_proc_pandas = pd.DataFrame(oper_proc_pandas)
 
-    proc_attr_token_bag_counter_pandas.to_csv('proc_attr_token_bag_counter.csv', index=False)
-    file_attr_token_bag_counter_pandas.to_csv('file_attr_token_bag_counter.csv', index=False)
-    net_attr_token_bag_counter_pandas.to_csv('net_attr_token_bag_counter.csv', index=False)
-    object_proc_attr_token_bag_pandas.to_csv('object_proc_attr_token_bag.csv', index=False)
-    file_process_attr_token_bag_pandas.to_csv('file_process_attr_token_bag.csv', index=False)
-    net_process_attr_token_bag_pandas.to_csv('net_process_attr_token_bag.csv', index=False)
-    subject_proc_object_proc_pandas.to_csv('subject_proc_object_proc.csv', index=False)
-    oper_proc_pandas.to_csv('oper_proc_pandas.csv', index=False)
+    #merge csv
+    if os.path.exists('proc_attr_token_bag_counter.csv'):
+        proc_attr_token_bag_counter_pandas_bak = pd.read_csv('proc_attr_token_bag_counter.csv')
+        pd.concat([proc_attr_token_bag_counter_pandas_bak, proc_attr_token_bag_counter_pandas],
+                  ignore_index=True).groupby('name', as_index=False).sum().to_csv('proc_attr_token_bag_counter.csv', index=False)
+    else:
+        proc_attr_token_bag_counter_pandas.to_csv('proc_attr_token_bag_counter.csv', index=False)
 
-    start_time = time.time()
-    append_to_neo4j()
+    if os.path.exists('proc_attr_token_bag.csv'):
+        proc_attr_token_bag_pandas_bak = pd.read_csv('proc_attr_token_bag.csv')
+        pd.concat([proc_attr_token_bag_pandas_bak, proc_attr_token_bag_pandas],
+                  ignore_index=True).drop_duplicates().to_csv('proc_attr_token_bag.csv', index=False)
+    else:
+        proc_attr_token_bag_pandas.to_csv('proc_attr_token_bag.csv', index=False)
 
-    node_count_query = "MATCH (n) RETURN COUNT(n) AS count"
-    node_count_result = graph.run(node_count_query).data()
-    total_nodes = node_count_result[0]['count']
-    relationship_count_query = "MATCH ()-[r]->() RETURN COUNT(r) AS count"
-    relationship_count_result = graph.run(relationship_count_query).data()
-    total_relationships = relationship_count_result[0]['count']
+    if os.path.exists('subject_proc_object_proc.csv'):
+        subject_proc_object_proc_pandas_bak = pd.read_csv('subject_proc_object_proc.csv')
+        pd.concat([subject_proc_object_proc_pandas_bak, subject_proc_object_proc_pandas],
+                  ignore_index=True).drop_duplicates().to_csv('subject_proc_object_proc.csv', index=False)
+    else:
+        subject_proc_object_proc_pandas.to_csv('subject_proc_object_proc.csv', index=False)
 
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    with open("perf.txt", "a") as p:
-        p.write("%s, %s, %s, %s\n" % (total_nodes, total_relationships, log_file_size, elapsed_time))
+    if os.path.exists('oper_proc_pandas.csv'):
+        oper_proc_pandas_bak = pd.read_csv('oper_proc_pandas.csv')
+        pd.concat([oper_proc_pandas_bak, oper_proc_pandas], ignore_index=True).drop_duplicates().to_csv(
+            'oper_proc_pandas.csv', index=False)
+    else:
+        oper_proc_pandas.to_csv('oper_proc_pandas.csv', index=False)
